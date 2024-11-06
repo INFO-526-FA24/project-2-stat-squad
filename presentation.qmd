@@ -1,0 +1,83 @@
+---
+title: |
+  <span style="color: white; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;">Plastic Waste Generation</span>
+subtitle: |
+  <div style="background-color: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; display: inline-block;">
+  <strong>Avengers Team</strong><br>
+  Project 1<br>
+  Data Visualization Class<br>
+  October 16, 2024
+  </div>
+title-slide-attributes:
+  data-background-image: "images/cover.jpg"
+  data-background-size: cover
+  data-background-opacity: '1'
+  data-background-position: center
+format: 
+  revealjs:
+    theme: [simple]
+    slide-number: true
+    slide-footer: "DATASET IMAGES"
+editor: visual
+execute:
+  echo: false
+  warning: false
+---
+
+<!-- Introduction Slide -->
+
+<img src="images/Intro.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Dataset Overview Slide -->
+
+<img src="images/dataset.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Question 1 Slide -->
+
+<img src="images/Q1.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Visualization of Question 1 Slide -->
+
+<img src="images/Q1_Viz.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Question 2 Slide -->
+
+<img src="images/Q2.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Visualization of Question 2 Slide -->
+
+<img src="images/Q2_Viz.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Question 3 Slide -->
+
+<img src="images/Q3.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Visualization of Question 3 Slide -->
+
+<img src="images/Q3_Viz.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Conclusion Slide -->
+
+<img src="images/Conclusion.png" style="width: 100%; height: auto;"/>
+
+------------------------------------------------------------------------
+
+<!-- Thank You Slide -->
+
+<img src="images/Thanks.png" style="width: 100%; height: auto;"/>

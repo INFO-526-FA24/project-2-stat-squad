@@ -1,0 +1,143 @@
+---
+title: "Statistical Study"
+subtitle: "INFO 526 - Fall 2024 - Project #2"
+author: 
+  - name: "Stat Squad"
+    affiliations:
+      - name: "School of Information, University of Arizona"
+description: "DESCRIPTION HERE"
+format:
+   html:
+    code-tools: true
+    code-overflow: wrap
+    embed-resources: true
+editor: visual
+execute:
+  warning: false
+  echo: false
+---
+
+## Abstract
+
+This project ...
+
+## Introduction
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# Loading required packages
+library(tidyverse)
+library(tidytuesdayR)
+library(broom)
+library(kableExtra)
+
+```
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+# Define the function to read dataset from a URL
+readUrl <- function(url) {
+  tryCatch(
+    expr = {
+      plastics <- readr::read_csv(url)
+      message("Your dataset has been downloaded and saved!")
+      return(plastics)
+    },
+    error = function(e) { 
+      message("Error downloading the dataset: ", e$message)
+      return(NULL)
+    }
+  )
+}
+
+url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv"
+
+# Load the dataset
+
+
+```
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+
+
+```
+
+## **Question 1:** 
+
+-   
+
+**Introduction:**
+
+Answering this question can help decision-makers take action...
+
+**Approach:**
+
+To answer this question, we needed to use the variables called:
+
+**Analysis:**
+
+To analyze this data, we ...
+
+**Visualizations**
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+
+```
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+```
+
+**Discussion:**
+
+## **Question 2:** 
+
+-   **Which companies are the most frequent contributors to plastic pollution?**
+
+**Introduction:**
+
+Knowing which *companies* contribute the most to plastic waste generation is essential because this information can incentivize people to buy products from environmentally responsible companies in the generation and discard process of the products they create. Social movements have been generated after this kind of data, where people no longer consume the products of companies that don't care for the environment.
+
+**Approach:**
+
+To answer this question, we ...
+
+**Visualizations**
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+
+
+
+```
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Create a new dataset excluding unbranded rows
+
+
+```
+
+**Discussion:**
+
+## **Question 3:** 
+
+-   What is ... ?
+
+**Introduction:**
+
+**Approach:**
+
+Variables used to answer this question:
+
+**Visualizations**
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Install and loading the necessary packages
+
+```
+
+**Discussion:**
+
+## Conclusion
+
+-   

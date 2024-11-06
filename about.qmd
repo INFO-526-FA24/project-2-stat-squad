@@ -1,0 +1,15 @@
+---
+title: "About"
+format: html
+editor: visual
+---
+
+This project was developed by **Stat Squad team** For [INFO 526 - Data Analysis and Visualization](https://datavizaz.org/) at the University of Arizona, taught by Prof Anna Leach. The team is comprised of
+
+-   ***Prasanth Gubbala***: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.
+
+-   ***Prudhvi***: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.
+
+-   ***Xenia De Gracia***: 3rd year PhD student in Environmental Sciences with a minor in Information Sciences.
+
+-   ***Rishab R Khatokar***: Pursuing Masters in Information Science/Machine Learning (2023 - 2025) at University of Arizona.
