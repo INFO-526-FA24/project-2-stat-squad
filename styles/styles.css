@@ -1,0 +1,8 @@
+.reveal {
+    overflow-y: auto; /* Enable vertical scrolling for the entire presentation */
+}
+
+.slide {
+    max-height: 90vh; /* Set max height for slides */
+    overflow-y: auto; /* Enable scrolling within each slide */
+}
