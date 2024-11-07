@@ -42,9 +42,10 @@ if(!require(kableExtra))
 #| message: false
 
 ```
+
 ## Description
 
-*The dataset we selected is called ... *
+*The dataset we selected is called ...*
 
 The dataset has a dimension of ....
 
@@ -52,7 +53,7 @@ The columns ... are categorized as `character`.
 
 The rest of the variables are categorized as `double`.
 
-**Summary of the  Dataset**
+**Summary of the Dataset**
 
 ```{r eval=FALSE, warning=FALSE}
 
@@ -74,11 +75,15 @@ summary(dataset)
 
 #### Question 1: ...?
 
--   **Dependent Variable**:
-    -   
--   **Independent Variables:**
-    -   
--   **Method:** 
+-   
+
+    ## **Dependent Variable**:
+
+-   
+
+    ## **Independent Variables:**
+
+-   **Method:**
 
 #### Question 2: ...?
 
@@ -90,7 +95,7 @@ summary(dataset)
 
     -   
 
--   **Method:** 
+-   **Method:**
 
 #### Question 3: ...?
 
@@ -102,20 +107,20 @@ summary(dataset)
 
     -   
 
--   **Method:** 
+-   **Method:**
 
 ## Weekly "plan of attack"
 
 The table below explains the steps to tackle our research questions on this project, including the team member(s) assigned for each task, and the week to work on it.
 
-| Task Name                             | Status      | Assignee   | Due    | Priority | Summary                                                                |
-|------------|------------|------------|------------|------------|------------|
-| Data Selection                        | Completed   | PG, PK, XD, RK  | Week 1 | High     | Select the dataset.                                                    |
-| Cleaning the data and preprocessing   | In Progress | PG, PK, XD, RK  | Week 2 | High     | Clean and transform data, prepare the dataset for further analysis.    |
-| Data visualization and analysis       | Not Started | PG, PK, XD, RK  | Week 3 | Moderate | EDA, generate visualizations and identify patterns                     |
-| Working on the questions and feedback | Not Started | PG, PK, XD, RK  | Week 4 | High     | Review the project’s core questions, and incorporate feedback          |
-| Drafting and Reviewing Results        | Not Started | PG, PK, XD, RK  | Week 5 | Moderate | Compile findings, draft report, and review results.                    |
-| Final Report and Presentation         | Not Started | PG, PK, XD, RK  | Week 6 | High     | Finalize report, prepare presentation materials, and present findings. |
+| Task Name                             | Status      | Assignee       | Due    | Priority | Summary                                                                |
+|---------------------------------------|-------------|----------------|--------|----------|------------------------------------------------------------------------|
+| Data Selection                        | Completed   | PG, PK, XD, RK | Week 1 | High     | Select the dataset.                                                    |
+| Cleaning the data and preprocessing   | In Progress | PG, PK, XD, RK | Week 2 | High     | Clean and transform data, prepare the dataset for further analysis.    |
+| Data visualization and analysis       | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns                     |
+| Working on the questions and feedback | Not Started | PG, PK, XD, RK | Week 4 | High     | Review the project’s core questions, and incorporate feedback          |
+| Drafting and Reviewing Results        | Not Started | PG, PK, XD, RK | Week 5 | Moderate | Compile findings, draft report, and review results.                    |
+| Final Report and Presentation         | Not Started | PG, PK, XD, RK | Week 6 | High     | Finalize report, prepare presentation materials, and present findings. |
 
 **PG** - Prasanth Gubbala
 

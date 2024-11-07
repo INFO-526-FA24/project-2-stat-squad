@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+/.quarto/
+*_freeze/index/
+*.json
+*_site
+_freeze/site_libs/clipboard/clipboard.min.js
