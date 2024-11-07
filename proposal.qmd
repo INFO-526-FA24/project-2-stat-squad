@@ -1,11 +1,11 @@
 ---
-title: "Project #2 proposal - Statistical Method"
-subtitle: "Proposal"
+title: "Project #2 proposal - Gradient Descent Visualizations with different optimizers!"
+subtitle: "Project-2 Proposal"
 author: 
   - name: "Stat Squad"
     affiliations:
       - name: "College of Information Science, University of Arizona"
-description: "........"
+
 format:
   html:
     code-tools: true
@@ -21,101 +21,104 @@ execute:
 ```{r eval=FALSE, warning=FALSE}
 #| label: load-pkgs
 #| message: false
-library(tidyverse)
-if(!require(tidytuesdayR))
-  install.packages("tidytuesdayR")
-#| label: load-broom
-if(!require(broom))
-  install.packages("broom")
-library(pacman)
-library(tidytuesdayR)
-library(broom)
-if(!require(kableExtra))
-  install.packages('kableExtra')
+
+library(ggplot2)
 
 ```
 
-## Dataset
+## Goal
 
-```{r eval=FALSE, warning=FALSE}
-#| label: load-dataset
-#| message: false
+To create a visual exploration of gradient descent optimizers, highlighting differences in their convergence behavior, efficiency, and suitability for various types of machine learning problems. This project aims to provide insights into the strengths and limitations of each optimizer through interactive and animated visualizations.
 
-```
-## Description
+## Project Overview and Motivation
 
-*The dataset we selected is called ... *
+Gradient descent is a fundamental optimization algorithm for training machine learning models by iteratively minimizing a loss function. However, various optimizers modify basic gradient descent to improve convergence speed, stability, and adaptability to different data characteristics. Optimizers such as ***Stochastic Gradient Descent (SGD)***, ***Momentum***, ***AdaGrad***, ***RMSProp***, and ***Adam*** each approach optimization differently, impacting their performance in diverse scenarios.
 
-The dataset has a dimension of ....
+The motivation for this project is to visually demonstrate the differences among these popular optimizers, particularly regarding their convergence paths and behaviors on various types of loss landscapes. This exploration will use synthetic data and real-world examples to highlight how each optimizer behaves in different scenarios, such as convex and non-convex optimization surfaces. Additionally, the project aims to help students and practitioners understand how to select an appropriate optimizer for specific machine learning tasks by visually comparing their performance.
 
-The columns ... are categorized as `character`.
+The project will introduce a new skill by employing R’s animation capabilities for dynamic visualizations. This approach not only serves as an educational tool for understanding optimization dynamics but also incorporates creative techniques for visualizing multi-dimensional data in an intuitive and accessible format.
 
-The rest of the variables are categorized as `double`.
+## Dataset and Approach
 
-**Summary of the  Dataset**
+1.  **Data**:
+    -   **Synthetic Data**: We will generate synthetic datasets that reflect different optimization landscapes, including convex, non-convex surfaces, and saddle-point. These will serve as simplified environments for demonstrating optimizer behaviors.
+        -   ***Quadratic Function (Convex Surface)***:
 
-```{r eval=FALSE, warning=FALSE}
+            -   **Minimum**: Located at (0,0).
 
-summary(dataset)
+            -   **Description**: A smooth, convex paraboloid that is symmetric around the origin, making it a straightforward example to observe the convergence path.
 
-```
+            ```{r eval=TRUE, warning=FALSE}
 
-### Reasons for choosing this dataset
+                x <- seq(-5, 5, length.out = 100)
+                y <- seq(-5, 5, length.out = 100)
+                grid <- expand.grid(x = x, y = y)
+                grid$z <- grid$x^2 + grid$y^2
 
-*...*
+                library(ggplot2)
+                ggplot(grid, aes(x = x, y = y, z = z)) +
+                  geom_contour_filled() +
+                  labs(title = "Quadratic Function: f(x, y) = x^2 + y^2")
 
-## Questions
+            ```
 
--   Question 1
--   Question 2
--   Question 3
+        -   ***Rosenbrock Function (Non-Convex Surface)***:
 
-## Analysis plan
+            -   **Parameters**: Typically, a=1 and b=100.
 
-#### Question 1: ...?
+            -   **Minimum**: Located at (a, a\^2), typically (1,1) with the default parameters.
 
--   **Dependent Variable**:
-    -   
--   **Independent Variables:**
-    -   
--   **Method:** 
+            -   **Description**: This non-convex function has a narrow valley that requires careful adjustment to navigate. It's often used to highlight how optimizers handle complex landscapes.
 
-#### Question 2: ...?
+            ```{r eval=TRUE, warning=FALSE}
+                    
+               a <- 1
+               b <- 100
+               x <- seq(-2, 2, length.out = 100)
+               y <- seq(-1, 3, length.out = 100)
+               grid <- expand.grid(x = x, y = y)
+               grid$z <- (a - grid$x)^2 + b * (grid$y - grid$x^2)^2
 
--   **Dependent Variable:**
+               ggplot(grid, aes(x = x, y = y, z = z)) +
+               geom_contour_filled() +
+               labs(title = "Rosenbrock Function: f(x, y) = (a - x)^2 + b * (y - x^2)^2")
 
-    -   
+            ```
 
--   **Independent Variable:**
+        -   ***Saddle Point Function (Mixed Curvature Surface)***:
 
-    -   
+            -   **Saddle Point**: Located at (0,0).
 
--   **Method:** 
+            -   **Description**: This function has a saddle point at the origin. It’s concave along one axis and convex along the other, providing a useful case for understanding optimizers' sensitivity to directional changes in curvature.
 
-#### Question 3: ...?
+            ```{r eval=TRUE, warning=FALSE}
+            x <- seq(-5, 5, length.out = 100)
+            y <- seq(-5, 5, length.out = 100)
+            grid <- expand.grid(x = x, y = y)
+            grid$z <- grid$x^2 - grid$y^2
 
--   **Dependent** **Variables**:
+            ggplot(grid, aes(x = x, y = y, z = z)) +
+              geom_contour_filled() +
+              labs(title = "Saddle Point Function: f(x, y) = x^2 - y^2")
 
-    -   
-
--   **Independent Variables:**
-
-    -   
-
--   **Method:** 
+            ```
+    -   **Real-World Data**: We may include a small real-world dataset, such as a regression or classification dataset, to demonstrate optimizers in a practical context.
+2.  **Methods**:
+    -   **Loss Landscapes and Visualizations**: Using R and relevant visualization libraries, we will animate and display each optimizer’s path through these loss landscapes, showcasing differences in convergence speed, oscillation, and stability.
+    -   **Interactive Analysis**: For each optimizer, we will visualize performance metrics, including loss vs. iterations, convergence rates, and learning rate adjustments over time. This will allow us to illustrate how these algorithms behave differently under varying conditions.
 
 ## Weekly "plan of attack"
 
 The table below explains the steps to tackle our research questions on this project, including the team member(s) assigned for each task, and the week to work on it.
 
-| Task Name                             | Status      | Assignee   | Due    | Priority | Summary                                                                |
-|------------|------------|------------|------------|------------|------------|
-| Data Selection                        | Completed   | PG, PK, XD, RK  | Week 1 | High     | Select the dataset.                                                    |
-| Cleaning the data and preprocessing   | In Progress | PG, PK, XD, RK  | Week 2 | High     | Clean and transform data, prepare the dataset for further analysis.    |
-| Data visualization and analysis       | Not Started | PG, PK, XD, RK  | Week 3 | Moderate | EDA, generate visualizations and identify patterns                     |
-| Working on the questions and feedback | Not Started | PG, PK, XD, RK  | Week 4 | High     | Review the project’s core questions, and incorporate feedback          |
-| Drafting and Reviewing Results        | Not Started | PG, PK, XD, RK  | Week 5 | Moderate | Compile findings, draft report, and review results.                    |
-| Final Report and Presentation         | Not Started | PG, PK, XD, RK  | Week 6 | High     | Finalize report, prepare presentation materials, and present findings. |
+| Task Name | Status | Assignee | Due | Priority | Summary |
+|----|----|----|----|----|----|
+| Data Selection | Completed | PG, PK, XD, RK | Week 1 | High | Select the dataset. |
+| Cleaning the data and preprocessing | In Progress | PG, PK, XD, RK | Week 2 | High | Clean and transform data, prepare the dataset for further analysis. |
+| Data visualization and analysis | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns |
+| Working on the questions and feedback | Not Started | PG, PK, XD, RK | Week 4 | High | Review the project’s core questions, and incorporate feedback |
+| Drafting and Reviewing Results | Not Started | PG, PK, XD, RK | Week 5 | Moderate | Compile findings, draft report, and review results. |
+| Final Report and Presentation | Not Started | PG, PK, XD, RK | Week 6 | High | Finalize report, prepare presentation materials, and present findings. |
 
 **PG** - Prasanth Gubbala
 
@@ -124,3 +127,19 @@ The table below explains the steps to tackle our research questions on this proj
 **XD** - Xenia De Gracia
 
 **RK** - Rishab RK
+
+## Expected Outcomes and Educational Value
+
+By the end of this project, we expect to deliver:
+
+1.  **Visual Comparisons**: A comprehensive set of visualizations comparing each optimizer’s convergence path, speed, and behavior across different loss surfaces.
+
+2.  **Interactive Learning Tool**: An animated, interactive tool to help students and practitioners understand optimizer selection in machine learning.
+
+3.  **Insights on Optimizer Suitability**: Insights on the suitability of various optimizers for specific scenarios and data types.
+
+Through these outcomes, this project will contribute to the understanding of machine learning optimizers and provide a valuable educational resource for those learning about optimization techniques in machine learning.
+
+## Conclusion
+
+Our project will offer a visual and analytical comparison of various gradient descent optimizers, exploring their strengths and limitations. This approach will help demystify optimizer selection, ultimately supporting a deeper understanding of optimization dynamics in machine learning models.
