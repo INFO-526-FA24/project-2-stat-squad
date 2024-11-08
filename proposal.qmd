@@ -143,3 +143,53 @@ Through these outcomes, this project will contribute to the understanding of mac
 ## Conclusion
 
 Our project will offer a visual and analytical comparison of various gradient descent optimizers, exploring their strengths and limitations. This approach will help demystify optimizer selection, ultimately supporting a deeper understanding of optimization dynamics in machine learning models.
+
+## Project Structure
+
+Here's a breakdown of the project's file structure:
+
+```         
+project-2-stat-squad/
+├── data/
+│   ├── README.md
+│   ├── ... (other data files)
+├── styles/
+│   ├── customtheming.scss
+│   ├── styles.css
+│   └── README.md
+├── documents/
+│   ├── project docs
+│   └── README.md
+├── presentation_images/
+│   ├── presentation slides
+│   └── README.md
+├── .gitignore
+├── README.md
+├── _quarto.yml
+├── proposal.qmd
+├── index.qmd
+├── presentation.qmd
+└── project-2-stat-squad.Rproj
+```
+
+**Key Files and Folders:**
+
+-   **data:** Contains raw and processed data used in the analysis.
+
+-   **styles:** Stores custom CSS styles for reports and presentations.
+
+-   **.gitignore:** Specifies files and directories to be ignored by Git.
+
+-   **.Rproj.user:** RStudio project-specific user settings.
+
+-   **README.md:** Provides general project information and documentation.
+
+-   **presentation_images:** Stores images used in presentations.
+
+-   **proposal.qmd:** Contains the initial project proposal.
+
+-   **index.qmd:** Serves as the main entry point for the project.
+
+-   **presentation.qmd:** Creates a presentation summarizing the project's results.
+
+-   **project-2-stat-squad.Rproj:** RStudio project file for managing the project's workspace.
