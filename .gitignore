@@ -9,3 +9,4 @@
 *_site
 _freeze/site_libs/clipboard/clipboard.min.js
 *.html
+*_freeze

@@ -1,6 +1,6 @@
 ---
-title: "Project #2 proposal - Gradient Descent Visualizations with different optimizers!"
-subtitle: "Project-2 Proposal"
+title: "Deep Learning Optimizer Dynamics"
+subtitle: "Project-2 proposal"
 author: 
   - name: "Stat Squad"
     affiliations:
@@ -18,7 +18,7 @@ execute:
   warning: false
 ---
 
-```{r eval=FALSE, warning=FALSE}
+```{r eval=FALSE, warning=FALSE, include=FALSE}
 #| label: load-pkgs
 #| message: false
 
@@ -28,11 +28,11 @@ library(ggplot2)
 
 ## Goal
 
-To create a visual exploration of gradient descent optimizers, highlighting differences in their convergence behavior, efficiency, and suitability for various types of machine learning problems. This project aims to provide insights into the strengths and limitations of each optimizer through interactive and animated visualizations.
+To create a visual exploration of **gradient descent optimizers**, highlighting differences in their convergence behavior, efficiency, and suitability for various types of machine learning problems. This project aims to provide insights into the strengths and limitations of each optimizer through interactive and animated visualizations.
 
 ## Project Overview and Motivation
 
-Gradient descent is a fundamental optimization algorithm for training machine learning models by iteratively minimizing a loss function. However, various optimizers modify basic gradient descent to improve convergence speed, stability, and adaptability to different data characteristics. Optimizers such as ***Stochastic Gradient Descent (SGD)***, ***Momentum***, ***AdaGrad***, ***RMSProp***, and ***Adam*** each approach optimization differently, impacting their performance in diverse scenarios.
+Gradient descent is a fundamental optimization algorithm for training machine learning models by iteratively minimizing a loss function. However, various optimizers modify basic gradient descent to improve convergence speed, stability, and adaptability to different data characteristics. Optimizers such as **Gradient Descent,** ***Stochastic Gradient Descent (SGD)***, ***Momentum***, ***AdaGrad***, ***RMSProp***, and ***Adam*** each approach optimization differently, impacting their performance in diverse scenarios.
 
 The motivation for this project is to visually demonstrate the differences among these popular optimizers, particularly regarding their convergence paths and behaviors on various types of loss landscapes. This exploration will use synthetic data and real-world examples to highlight how each optimizer behaves in different scenarios, such as convex and non-convex optimization surfaces. Additionally, the project aims to help students and practitioners understand how to select an appropriate optimizer for specific machine learning tasks by visually comparing their performance.
 
@@ -111,14 +111,14 @@ The project will introduce a new skill by employing R’s animation capabilities
 
 The table below explains the steps to tackle our research questions on this project, including the team member(s) assigned for each task, and the week to work on it.
 
-| Task Name | Status | Assignee | Due | Priority | Summary |
-|----|----|----|----|----|----|
-| Data Selection | Completed | PG, PK, XD, RK | Week 1 | High | Select the dataset. |
-| Cleaning the data and preprocessing | In Progress | PG, PK, XD, RK | Week 2 | High | Clean and transform data, prepare the dataset for further analysis. |
-| Data visualization and analysis | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns |
-| Working on the questions and feedback | Not Started | PG, PK, XD, RK | Week 4 | High | Review the project’s core questions, and incorporate feedback |
-| Drafting and Reviewing Results | Not Started | PG, PK, XD, RK | Week 5 | Moderate | Compile findings, draft report, and review results. |
-| Final Report and Presentation | Not Started | PG, PK, XD, RK | Week 6 | High | Finalize report, prepare presentation materials, and present findings. |
+| Task Name                             | Status      | Assignee       | Due    | Priority | Summary                                                                |
+|------------|------------|------------|------------|------------|------------|
+| Data Selection                        | Completed   | PG, PK, XD, RK | Week 1 | High     | Select the dataset.                                                    |
+| Cleaning the data and preprocessing   | In Progress | PG, PK, XD, RK | Week 2 | High     | Clean and transform data, prepare the dataset for further analysis.    |
+| Data visualization and analysis       | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns                     |
+| Working on the questions and feedback | Not Started | PG, PK, XD, RK | Week 4 | High     | Review the project’s core questions, and incorporate feedback          |
+| Drafting and Reviewing Results        | Not Started | PG, PK, XD, RK | Week 5 | Moderate | Compile findings, draft report, and review results.                    |
+| Final Report and Presentation         | Not Started | PG, PK, XD, RK | Week 6 | High     | Finalize report, prepare presentation materials, and present findings. |
 
 **PG** - Prasanth Gubbala
 
