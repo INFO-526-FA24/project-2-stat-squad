@@ -42,6 +42,7 @@ The project will introduce a new skill by employing R’s animation capabilities
 
 1.  **Data**:
     -   **Synthetic Data**: We will generate synthetic datasets that reflect different optimization landscapes, including convex, non-convex surfaces, and saddle-point. These will serve as simplified environments for demonstrating optimizer behaviors.
+
         -   ***Quadratic Function (Convex Surface)***:
 
             -   **Minimum**: Located at (0,0).
@@ -102,7 +103,30 @@ The project will introduce a new skill by employing R’s animation capabilities
               labs(title = "Saddle Point Function: f(x, y) = x^2 - y^2")
 
             ```
-    -   **Real-World Data**: We may include a small real-world dataset, such as a regression or classification dataset, to demonstrate optimizers in a practical context.
+
+    -   **Real-World Data**:
+
+        -   To contextualize optimizer performance, we will analyze a dataset containing medal counts for the Paris 2024 Olympics, sourced from kaggle([https://www.kaggle.com/datasets/piterfm/paris-2024-olympic-summer-games](https://www.kaggle.com/datasets/piterfm/paris-2024-olympic-summer-games?resource=download&select=medals_total.csv)). This structured dataset includes medals won by various countries or events, offering a real-world basis for applying regression or classification techniques. By exploring how different optimizers affect model predictions, we can draw insights into their efficacy and behavior on structured sports data.
+
+        ```{r eval=TRUE, warning=FALSE}
+
+
+        # Loading the data 
+        data <- read.csv("./data/medals_total.csv")
+
+        # Summary of dataset
+        summary(data)
+
+        ```
+
+        -   The dataset contains the following columns:
+            -   ***country_code***: Abbreviated code for each country (e.g., "USA", "CHN").
+            -   ***country***: Standard country name (e.g., "United States").
+            -   **country_long**: Full country name (e.g., "United States of America").
+            -   ***Gold Medal***: Number of gold medals won by each country.
+            -   ***Silver Medal***: Number of silver medals won by each country.
+            -   ***Bronze Medal***: Number of bronze medals won by each country.
+            -   ***Total***: Total medals won by each country.
 2.  **Methods**:
     -   **Loss Landscapes and Visualizations**: Using R and relevant visualization libraries, we will animate and display each optimizer’s path through these loss landscapes, showcasing differences in convergence speed, oscillation, and stability.
     -   **Interactive Analysis**: For each optimizer, we will visualize performance metrics, including loss vs. iterations, convergence rates, and learning rate adjustments over time. This will allow us to illustrate how these algorithms behave differently under varying conditions.
@@ -111,14 +135,14 @@ The project will introduce a new skill by employing R’s animation capabilities
 
 The table below explains the steps to tackle our research questions on this project, including the team member(s) assigned for each task, and the week to work on it.
 
-| Task Name                             | Status      | Assignee       | Due    | Priority | Summary                                                                |
+| Task Name | Status | Assignee | Due | Priority | Summary |
 |------------|------------|------------|------------|------------|------------|
-| Data Selection                        | Completed   | PG, PK, XD, RK | Week 1 | High     | Select the dataset.                                                    |
-| Cleaning the data and preprocessing   | In Progress | PG, PK, XD, RK | Week 2 | High     | Clean and transform data, prepare the dataset for further analysis.    |
-| Data visualization and analysis       | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns                     |
-| Working on the questions and feedback | Not Started | PG, PK, XD, RK | Week 4 | High     | Review the project’s core questions, and incorporate feedback          |
-| Drafting and Reviewing Results        | Not Started | PG, PK, XD, RK | Week 5 | Moderate | Compile findings, draft report, and review results.                    |
-| Final Report and Presentation         | Not Started | PG, PK, XD, RK | Week 6 | High     | Finalize report, prepare presentation materials, and present findings. |
+| Data Selection | Completed | PG, PK, XD, RK | Week 1 | High | Select the dataset. |
+| Cleaning the data and preprocessing | In Progress | PG, PK, XD, RK | Week 2 | High | Clean and transform data, prepare the dataset for further analysis. |
+| Data visualization and analysis | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns |
+| Working on the questions and feedback | Not Started | PG, PK, XD, RK | Week 4 | High | Review the project’s core questions, and incorporate feedback |
+| Drafting and Reviewing Results | Not Started | PG, PK, XD, RK | Week 5 | Moderate | Compile findings, draft report, and review results. |
+| Final Report and Presentation | Not Started | PG, PK, XD, RK | Week 6 | High | Finalize report, prepare presentation materials, and present findings. |
 
 **PG** - Prasanth Gubbala
 
