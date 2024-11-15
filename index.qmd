@@ -1,11 +1,11 @@
 ---
-title: "Statistical Study"
+title: "Deep Learning Optimizer Dynamics"
 subtitle: "INFO 526 - Fall 2024 - Project #2"
 author: 
   - name: "Stat Squad"
     affiliations:
       - name: "School of Information, University of Arizona"
-description: "DESCRIPTION HERE"
+description: "A visual exploration of gradient descent optimizers, including Gradient Descent, Stochastic Gradient Descent (SGD), Momentum, AdaGrad, RMSProp, and Adam, comparing their convergence behavior, efficiency, and suitability across various optimization landscapes and real-world datasets."
 format:
    html:
     code-tools: true
@@ -19,9 +19,15 @@ execute:
 
 ## Abstract
 
-This project ...
+This project aims to provide an in-depth visual analysis of various gradient descent-based optimization algorithms, including Gradient Descent, Stochastic Gradient Descent (SGD), Momentum, AdaGrad, RMSProp, and Adam. By simulating these optimizers on different synthetic loss landscapes and applying them to a real-world dataset, the project will explore their distinct convergence behaviors, efficiency, and adaptability. Through dynamic visualizations and interactive tools, the project will help users understand the strengths and limitations of each optimizer, enabling better selection of optimization techniques for different machine learning tasks.
 
 ## Introduction
+
+Optimization is a fundamental component of machine learning, as it drives the process of training models by minimizing a loss function. One of the most widely used optimization techniques is gradient descent, which iteratively adjusts model parameters to reduce the error in predictions. However, the basic gradient descent algorithm has limitations, such as slow convergence and sensitivity to the choice of learning rate. To address these challenges, several optimizers have been developed to improve the efficiency, stability, and adaptability of gradient descent.
+
+This project focuses on six popular gradient descent-based optimizers: **Gradient Descent**, **Stochastic Gradient Descent (SGD)**, **Momentum**, **AdaGrad**, **RMSProp**, and **Adam**. These optimizers differ in how they adjust the learning rate, incorporate past gradients, and handle noisy data. While each optimizer has its advantages and drawbacks, understanding their behavior and performance on different types of loss functions is crucial for selecting the most appropriate method for a given machine learning task.
+
+The goal of this project is to visually demonstrate the convergence behaviors and efficiency of these optimizers in various optimization landscapes, such as convex, non-convex, and saddle-point surfaces. Using both synthetic data and real-world examples, the project will explore how each optimizer performs across different types of loss surfaces. By generating dynamic, animated visualizations, we aim to provide a deeper understanding of how each optimizer functions, offering a valuable tool for students and practitioners to choose the right optimization technique for their machine learning models.
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 # Loading required packages
@@ -53,91 +59,589 @@ url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/dat
 
 # Load the dataset
 
-
 ```
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+## **Approach:**
+
+#### **1. Synthetic Data**
+
+-   **Objective:** Explore optimizer performance on different synthetic loss landscapes (convex, non-convex, saddle point).
+
+    -   **Gradient Descent**: Apply on quadratic function (convex).
+
+    -   **Stochastic Gradient Descent (SGD)**: Apply on quadratic function, check for noisy convergence.
+
+    -   **Momentum**: Apply on quadratic function and Rosenbrock function to test smoother convergence.
+
+    -   **AdaGrad**: Apply on non-convex and saddle point functions to see how learning rate adapts.
+
+    -   **RMSProp**: Test on non-convex and saddle point functions for faster convergence.
+
+    -   **Adam**: Apply on all landscapes (quadratic, Rosenbrock, saddle point) to compare convergence stability and speed.
+
+#### **2. Real-World Data**
+
+-   **Objective:** Apply optimizers to a real-world dataset (e.g., Paris 2024 Olympic Medal Counts) for regression or classification tasks.
+
+    -   **Gradient Descent**: Use for basic regression on the Olympic data, observe how it handles the structured data.
+
+    -   **Stochastic Gradient Descent (SGD)**: Use for regression/classification, observe its noise handling on the real-world dataset.
+
+    -   **Momentum**: Apply on real-world data, test if momentum improves speed and stability.
+
+    -   **AdaGrad**: Use to see how AdaGrad handles varying feature scales in the Olympic dataset.
+
+    -   **RMSProp**: Test for performance improvements, especially in noisy or heterogeneous data scenarios.
+
+    -   **Adam**: Apply to the real-world dataset to assess convergence speed, stability, and efficiency.
+
+## Exploring Optimizers on Synthetic Data
+
+Synthetic data helps us simulate and study optimizer behavior in controlled environments where we know the true function and its minimum. This allows for a more straightforward analysis of how optimizers perform in different loss landscapes. For the synthetic data, we will generate loss surfaces for three different types: convex, non-convex, and saddle-point.
+
+### **Generating Synthetic Data in R:**
+
+-   ***Quadratic Function (Convex Surface)***:
+
+    -   **Formula**: $$f(x, y) = x^2 + y^2$$
+
+    -   **Minimum**: Located at (0,0).
+
+    -   **Description**: A smooth, convex paraboloid that is symmetric around the origin, making it a straightforward example to observe the convergence path.
+
+    ```{r eval=TRUE, warning=FALSE}
+
+        x <- seq(-5, 5, length.out = 100)
+        y <- seq(-5, 5, length.out = 100)
+        grid <- expand.grid(x = x, y = y)
+        grid$z <- grid$x^2 + grid$y^2
+
+        library(ggplot2)
+        ggplot(grid, aes(x = x, y = y, z = z)) +
+          geom_contour_filled() # +
+          # labs(title = "Quadratic Function: f(x, y) = x^2 + y^2")
+
+    ```
+
+-   ***Rosenbrock Function (Non-Convex Surface)***:
+
+    -   **Formual**: $$f(x, y) = (a - x)^2 + b \cdot (y - x^2)^2$$
+
+    -   **Parameters**: Typically, a=1 and b=100.
+
+    -   **Minimum**: Located at (a, a\^2), typically (1,1) with the default parameters.
+
+    -   **Description**: This non-convex function has a narrow valley that requires careful adjustment to navigate. It's often used to highlight how optimizers handle complex landscapes.
+
+    ```{r eval=TRUE, warning=FALSE}
+            
+       a <- 1
+       b <- 100
+       x <- seq(-2, 2, length.out = 100)
+       y <- seq(-1, 3, length.out = 100)
+       grid <- expand.grid(x = x, y = y)
+       grid$z <- (a - grid$x)^2 + b * (grid$y - grid$x^2)^2
+
+       ggplot(grid, aes(x = x, y = y, z = z)) +
+       geom_contour_filled() # +
+       # labs(title = "Rosenbrock Function: f(x, y) = (a - x)^2 + b * (y - x^2)^2")
+
+    ```
+
+-   ***Saddle Point Function (Mixed Curvature Surface)***:
+
+    -   **Formula**: $$f(x, y) = x^2 - y^2$$
+
+    -   **Saddle Point**: Located at (0,0).
+
+    -   **Description**: This function has a saddle point at the origin. It’s concave along one axis and convex along the other, providing a useful case for understanding optimizers' sensitivity to directional changes in curvature.
+
+    ```{r eval=TRUE, warning=FALSE}
+    x <- seq(-5, 5, length.out = 100)
+    y <- seq(-5, 5, length.out = 100)
+    grid <- expand.grid(x = x, y = y)
+    grid$z <- grid$x^2 - grid$y^2
+
+    ggplot(grid, aes(x = x, y = y, z = z)) +
+      geom_contour_filled() # +
+      # labs(title = "Saddle Point Function: f(x, y) = x^2 - y^2")
+
+    ```
+
+### **Gradient Descent**
+
+-   **Mathematical Intuition:** Gradient Descent updates parameters based on the negative gradient of the loss function. For a function f(x)f(x), the update rule is:
+
+    $$\theta_{t+1} = \theta_t - \eta \nabla f(\theta_t)$$
+
+    where ηη is the learning rate and ∇f(θt)∇f(θt​) is the gradient at point θtθt​.
+
+-   **R Implementation:**
+
+    ```{r include=TRUE}
+    # Gradient Descent on Quadratic Function
+    library(ggplot2)
+
+    # Gradient Descent Function
+    gradient_descent <- function(x_init, y_init, learning_rate, n_iter) {
+      x <- x_init
+      y <- y_init
+      # Initialize path with initial values for x, y, dx, and dy
+      path <- data.frame(x = x, y = y, dx = NA, dy = NA)
+      
+      for (i in 1:n_iter) {
+        grad_x <- 2 * x  # Gradient with respect to x
+        grad_y <- 2 * y  # Gradient with respect to y
+        dx <- -learning_rate * grad_x
+        dy <- -learning_rate * grad_y
+        x <- x + dx
+        y <- y + dy
+        # Store the updated position and direction (dx, dy)
+        path <- rbind(path, data.frame(x = x, y = y, dx = dx, dy = dy))
+      }
+      
+      return(path)
+    }
+
+    # Initial point and learning rate
+    x_init <- 4
+    y_init <- 4
+    learning_rate <- 0.1
+    n_iter <- 50
+
+    # Run gradient descent
+    path <- gradient_descent(x_init, y_init, learning_rate, n_iter)
+
+    # Plotting the trajectory with arrows to show direction
+    ggplot(path, aes(x = x, y = y)) +
+      geom_path() +
+      geom_point(aes(x = x_init, y = y_init), color = "red") +
+      geom_segment(aes(xend = x + dx, yend = y + dy), 
+                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
+                   size = 0.5) +
+      labs(title = "Gradient Descent Trajectory on f(x, y) = x^2 + y^2") +
+      theme_minimal()
+
+    ```
+
+**Explanation:** In this implementation, we start from an initial point (4,4)(4,4) and iteratively update the values of xx and yy according to the gradient of the quadratic function. The path shows how the optimizer converges to the minimum at (0,0)(0,0).
+
+### **Stochastic Gradient Descent (SGD)**
+
+-   **Mathematical Intuition:** In **SGD**, instead of using the full gradient, we compute the gradient using a single random data point. This makes the process noisy but can be more efficient in large datasets.
+
+-   **R Implementation:**
+
+    ```{r}
+    # Stochastic Gradient Descent on Quadratic Function
+    library(ggplot2)
+
+    # Stochastic Gradient Descent Function
+    stochastic_gradient_descent <- function(x_init, y_init, learning_rate, n_iter) {
+      x <- x_init
+      y <- y_init
+      # Initialize path with x, y, dx, dy columns for storing positions and direction
+      path <- data.frame(x = x, y = y, dx = NA, dy = NA)
+      
+      for (i in 1:n_iter) {
+        grad_x <- 2 * x + runif(1, -0.1, 0.1)  # Add noise to gradient for x
+        grad_y <- 2 * y + runif(1, -0.1, 0.1)  # Add noise to gradient for y
+        dx <- -learning_rate * grad_x  # Update for x
+        dy <- -learning_rate * grad_y  # Update for y
+        x <- x + dx
+        y <- y + dy
+        # Append the updated position and direction
+        path <- rbind(path, data.frame(x = x, y = y, dx = dx, dy = dy))
+      }
+      
+      return(path)
+    }
+
+    # Initial point and learning rate
+    x_init <- 4
+    y_init <- 4
+    learning_rate <- 0.1
+    n_iter <- 50
+
+    # Run stochastic gradient descent
+    path_sgd <- stochastic_gradient_descent(x_init, y_init, learning_rate, n_iter)
+
+    # Plotting the trajectory with arrows to show learning rate direction
+    ggplot(path_sgd, aes(x = x, y = y)) +
+      geom_path() +
+      geom_point(aes(x = x_init, y = y_init), color = "red") +
+      geom_segment(aes(xend = x + dx, yend = y + dy), 
+                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
+                   size = 0.5) +  # Add arrows to show direction
+      labs(title = "SGD Trajectory on f(x, y) = x^2 + y^2 with Noise") +
+      theme_minimal()
 
 
+    ```
 
-```
+    **Explanation:** This version of gradient descent introduces noise at each iteration, mimicking the stochastic nature of SGD. It still converges to the minimum, but with oscillations due to the noise.
 
-## **Question 1:** 
+### **Momentum Optimizer**
 
--   
+-   **Mathematical Intuition:** Momentum is an optimization technique that helps accelerate gradient descent by adding a fraction of the previous update to the current update. This reduces oscillations and helps in faster convergence.
 
-**Introduction:**
+-   **Update Rule:**
 
-Answering this question can help decision-makers take action...
+    $$v_t = \beta v_{t-1} + (1 - \beta) \nabla f(\theta_t)$$
 
-**Approach:**
+    $$\theta_{t+1} = \theta_t - \eta v_t$$
 
-To answer this question, we needed to use the variables called:
+    where:
 
-**Analysis:**
+    -   vtvt​ is the velocity (momentum),
 
-To analyze this data, we ...
+    -   ββ is the momentum coefficient (usually close to 1),
 
-**Visualizations**
+    -   ηη is the learning rate,
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+    -   ∇f(θt)∇f(θt​) is the gradient at the current step.
+
+-   Momentum helps speed up the convergence by adding a fraction of the previous velocity to the current gradient.
+
+-   **R Implementation:**
+
+    ```{r}
+    # Momentum Optimization on Quadratic Function
+    library(ggplot2)
+
+    # Momentum Optimization Function
+    momentum_optimizer <- function(x_init, y_init, learning_rate, beta, n_iter) {
+      x <- x_init
+      y <- y_init
+      v_x <- 0  # Initialize velocity for x
+      v_y <- 0  # Initialize velocity for y
+      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      
+      for (i in 1:n_iter) {
+        grad_x <- 2 * x
+        grad_y <- 2 * y
+        
+        # Update velocity
+        v_x <- beta * v_x + (1 - beta) * grad_x
+        v_y <- beta * v_y + (1 - beta) * grad_y
+        
+        # Update parameters (position)
+        x <- x - learning_rate * v_x
+        y <- y - learning_rate * v_y
+        
+        # Store the updated position and step direction (dx, dy)
+        path <- rbind(path, data.frame(x = x, y = y, dx = -learning_rate * v_x, dy = -learning_rate * v_y))
+      }
+      
+      return(path)
+    }
+
+    # Run Momentum Optimization
+    path_momentum <- momentum_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, beta = 0.9, n_iter = 50)
+
+    # Plotting the trajectory with arrows to show direction of learning rate
+    ggplot(path_momentum, aes(x = x, y = y)) +
+      geom_path() +
+      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
+      geom_segment(aes(xend = x + dx, yend = y + dy), 
+                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
+                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
+      labs(title = "Momentum Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
+      theme_minimal()
+
+    ```
+
+### **AdaGrad Optimizer**
+
+-   **Mathematical Intuition:** AdaGrad adapts the learning rate for each parameter based on the historical gradients. Parameters that have frequently large gradients get smaller updates, and parameters with infrequent large gradients get larger updates.
+
+-   **Update Rule:**
+
+    $$
+    g_t = \nabla f(\theta_t)
+    $$
+
+    $$
+    G_t = G_{t-1} + g_t^2
+    $$
+
+    $$
+    \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \cdot g_t
+    $$
+
+    where:
+
+    -   GtGt​ is the sum of squared gradients,
+
+    -   ϵϵ is a small constant to prevent division by zero.
+
+-   AdaGrad ensures that frequently updated parameters have smaller learning rates.
+
+-   **R Implementation:**
+
+    ```{r}
+    library(ggplot2)
+
+    # AdaGrad Optimization Function
+    adagrad_optimizer <- function(x_init, y_init, learning_rate, epsilon, n_iter) {
+      x <- x_init
+      y <- y_init
+      G_x <- 0  # Initialize sum of squared gradients for x
+      G_y <- 0  # Initialize sum of squared gradients for y
+      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      
+      for (i in 1:n_iter) {
+        grad_x <- 2 * x
+        grad_y <- 2 * y
+        
+        # Update sum of squared gradients
+        G_x <- G_x + grad_x^2
+        G_y <- G_y + grad_y^2
+        
+        # Update parameters (position)
+        x <- x - (learning_rate / (sqrt(G_x) + epsilon)) * grad_x
+        y <- y - (learning_rate / (sqrt(G_y) + epsilon)) * grad_y
+        
+        # Store the updated position and the direction based on the adaptive learning rate
+        path <- rbind(path, data.frame(x = x, y = y, 
+                                       dx = - (learning_rate / (sqrt(G_x) + epsilon)) * grad_x, 
+                                       dy = - (learning_rate / (sqrt(G_y) + epsilon)) * grad_y))
+      }
+      
+      return(path)
+    }
+
+    # Run AdaGrad Optimization
+    path_adagrad <- adagrad_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, epsilon = 1e-8, n_iter = 50)
+
+    # Plotting the trajectory with arrows to show direction of learning rate
+    ggplot(path_adagrad, aes(x = x, y = y)) +
+      geom_path() +
+      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
+      geom_segment(aes(xend = x + dx, yend = y + dy), 
+                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
+                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
+      labs(title = "AdaGrad Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
+      theme_minimal()
+
+    ```
+
+### **RMSProp Optimizer**
+
+-   **Mathematical Intuition:** RMSProp is an adaptive learning rate method that divides the learning rate by a moving average of the squared gradients. It works similarly to AdaGrad but with a smoothing term to prevent the learning rate from decaying too quickly.
+
+-   **Update Rule:**
+
+    -   Compute the first moment (gradient) gtgt​:
+
+        $$
+        g_t = \nabla f(\theta_t)
+        $$
+
+    -   Update the second moment vtvt​ with exponential decay:
+
+        $$
+        v_t = \beta v_{t-1} + (1 - \beta) g_t^2
+        $$
+
+    -   Update the parameter $$\theta_{t+1}$$ using the RMSprop rule:
+
+        $$
+        \theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{v_t + \epsilon}} \cdot g_t
+        $$
+
+         where:
+
+        -   vtvt​ is the moving average of squared gradients,
+
+        -   ββ is the smoothing constant, typically set to 0.9,
+
+        -   ϵϵ is a small constant for numerical stability.
+
+    -   RMSProp adapts the learning rate based on recent gradient information, helping to prevent the learning rate from shrinking too quickly.
+
+-   **R Implementation:**
+
+    ```{r}
+    # RMSProp Optimization on Quadratic Function
+    library(ggplot2)
+
+    # RMSProp Optimization Function
+    rmsprop_optimizer <- function(x_init, y_init, learning_rate, beta, epsilon, n_iter) {
+      x <- x_init
+      y <- y_init
+      v_x <- 0  # Initialize moving average for x
+      v_y <- 0  # Initialize moving average for y
+      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      
+      for (i in 1:n_iter) {
+        grad_x <- 2 * x
+        grad_y <- 2 * y
+        
+        # Update moving averages of squared gradients
+        v_x <- beta * v_x + (1 - beta) * grad_x^2
+        v_y <- beta * v_y + (1 - beta) * grad_y^2
+        
+        # Update parameters (position)
+        x <- x - (learning_rate / (sqrt(v_x) + epsilon)) * grad_x
+        y <- y - (learning_rate / (sqrt(v_y) + epsilon)) * grad_y
+        
+        # Store the updated position and direction based on the adaptive learning rate
+        path <- rbind(path, data.frame(x = x, y = y, 
+                                       dx = - (learning_rate / (sqrt(v_x) + epsilon)) * grad_x, 
+                                       dy = - (learning_rate / (sqrt(v_y) + epsilon)) * grad_y))
+      }
+      
+      return(path)
+    }
+
+    # Run RMSProp Optimization
+    path_rmsprop <- rmsprop_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, beta = 0.9, epsilon = 1e-8, n_iter = 50)
+
+    # Plotting the trajectory with arrows to show direction of learning rate
+    ggplot(path_rmsprop, aes(x = x, y = y)) +
+      geom_path() +
+      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
+      geom_segment(aes(xend = x + dx, yend = y + dy), 
+                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
+                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
+      labs(title = "RMSProp Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
+      theme_minimal()
 
 
-```
+    ```
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+### **Adam Optimizer**
 
-```
+-   **Mathematical Intuition:** Adam (Adaptive Moment Estimation) combines the ideas of both **Momentum** and **RMSProp**. It tracks both the first moment (mean) and second moment (variance) of the gradients to adapt the learning rate for each parameter. It also uses bias correction to account for the initialization of the first and second moment estimates.
 
-**Discussion:**
+-   **Update Rule:**
 
-## **Question 2:** 
+    1.  **First Moment Estimate (Momentum):**​$$
+        m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t
+        $$
 
--   **Which companies are the most frequent contributors to plastic pollution?**
+        Where $$m_t$$ is the first moment estimate (momentum) and $$g_t$$ is the gradient at time t.
 
-**Introduction:**
+    2.  **Second Moment Estimate (RMSprop-like):**
 
-Knowing which *companies* contribute the most to plastic waste generation is essential because this information can incentivize people to buy products from environmentally responsible companies in the generation and discard process of the products they create. Social movements have been generated after this kind of data, where people no longer consume the products of companies that don't care for the environment.
+        $$
+        v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
+        $$
 
-**Approach:**
+        Where $$v_t$$ is the second moment estimate (similar to RMSprop).
 
-To answer this question, we ...
+    3.  **Bias-Corrected First Moment Estimate:**
 
-**Visualizations**
+        $$\hat{m}_t = \frac{m_t}{1 - \beta_1^t}$$
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+        This corrects the bias introduced by the initialization of mtmt​.
 
+    4.  **Bias-Corrected Second Moment Estimate:**
 
+        $$\hat{v}_t = \frac{v_t}{1 - \beta_2^t}$$
 
-```
+        This corrects the bias introduced by the initialization of vtvt​.
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-# Create a new dataset excluding unbranded rows
+    5.  **Parameter Update:**
 
+        $$\theta_{t+1} = \theta_t - \frac {\eta}{\sqrt{\hat{v}_t + \epsilon}} \hat{m}_t$$
 
-```
+    6.  
 
-**Discussion:**
+        Where:
 
-## **Question 3:** 
+        -   η is the learning rate,
 
--   What is ... ?
+        -   ϵ is a small constant for numerical stability,
 
-**Introduction:**
+        -   m is the bias-corrected first moment estimate,
 
-**Approach:**
+        -   v​ is the bias-corrected second moment estimate.
 
-Variables used to answer this question:
+-   Adam is highly effective and widely used due to its ability to adapt the learning rate(based on the gradient's first and second moments) and improve convergence for a wide variety of tasks.
 
-**Visualizations**
+-   **R Implementation:**
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-# Install and loading the necessary packages
+    ```{r}
+    library(ggplot2)
 
-```
+    # Adam Optimization Function with Learning Rate Direction
+    adam_optimizer <- function(x_init, y_init, learning_rate, beta1, beta2, epsilon, n_iter) {
+      x <- x_init
+      y <- y_init
+      m_x <- 0  # Initialize first moment estimate for x
+      m_y <- 0  # Initialize first moment estimate for y
+      v_x <- 0  # Initialize second moment estimate for x
+      v_y <- 0  # Initialize second moment estimate for y
+      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      
+      for (i in 1:n_iter) {
+        grad_x <- 2 * x  # Gradient for x
+        grad_y <- 2 * y  # Gradient for y
+        
+        # Update first moment estimate (mean of gradients)
+        m_x <- beta1 * m_x + (1 - beta1) * grad_x
+        m_y <- beta1 * m_y + (1 - beta1) * grad_y
+        
+        # Update second moment estimate (variance of gradients)
+        v_x <- beta2 * v_x + (1 - beta2) * grad_x^2
+        v_y <- beta2 * v_y + (1 - beta2) * grad_y^2
+        
+        # Bias correction for moment estimates
+        m_x_hat <- m_x / (1 - beta1^i)
+        m_y_hat <- m_y / (1 - beta1^i)
+        v_x_hat <- v_x / (1 - beta2^i)
+        v_y_hat <- v_y / (1 - beta2^i)
+        
+        # Update parameters
+        dx <- (learning_rate / (sqrt(v_x_hat) + epsilon)) * m_x_hat
+        dy <- (learning_rate / (sqrt(v_y_hat) + epsilon)) * m_y_hat
+        
+        x <- x - dx
+        y <- y - dy
+        
+        # Save parameter updates and directions for plotting
+        path <- rbind(path, data.frame(x = x, y = y, dx = -dx, dy = -dy))
+      }
+      
+      return(path)
+    }
 
-**Discussion:**
+    # Run Adam Optimization
+    path_adam <- adam_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8, n_iter = 50)
 
-## Conclusion
+    # Plotting the trajectory with arrows to show direction of learning rate
+    ggplot(path_adam, aes(x = x, y = y)) +
+      geom_path() +
+      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
+      geom_segment(aes(xend = x + dx, yend = y + dy), 
+                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
+                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
+      labs(title = "Adam Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
+      theme_minimal()
 
--   
+    ```
+
+### Comparison Between Optimizes
+
+| **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
+|----------------------|------------------------------------|-----------------------------|-----------------------------|-----------------------------------|
+| **Gradient Descent** | Full gradient each update          | Stable convergence          | Slow, costly                | Small, static datasets            |
+| **SGD**              | One sample/batch per update        | Fast, escapes minima        | High variance, less stable  | Large datasets, limited resources |
+| **Momentum**         | Adds momentum to smooth updates    | Faster, reduces oscillation | Adds tuning complexity      | Oscillatory paths                 |
+| **AdaGrad**          | Adapts learning rate per parameter | Good for sparse data        | Learning rate decays        | Sparse datasets                   |
+| **RMSProp**          | Moving avg. squared gradients      | Solves AdaGrad decay issue  | Needs decay rate tuning     | Non-stationary tasks (e.g., RNNs) |
+| **Adam**             | Combines Momentum + RMSProp        | Fast, robust to noise       | Complex, more tuning needed | General-purpose neural networks   |
+
+### Key Points
+
+-   **Adam** is versatile and works well with noisy data.
+
+-   **SGD** is efficient and helps in escaping local minima.
+
+-   **AdaGrad** is effective for sparse features but suffers from decaying rates.
+
+-   **RMSProp** is better for non-stationary objectives, like time-series.
+
+## Exploring Optimizers on Real World Data
