@@ -64,6 +64,8 @@ By the end of this project, we expect to deliver:
 - **Interactive Learning Tool**: An animated, interactive tool to aid in understanding the dynamics of various optimizers.
 - **Insights on Optimizer Suitability**: Insights on how to choose the best optimizer for specific machine learning tasks.
 
+![](optimization_3d_fixed.gif)
+
 ## Conclusion
 
 This project will provide a valuable educational resource for those learning about optimization techniques in machine learning, especially deep learning. By visually demonstrating how different optimizers behave on various types of loss landscapes, we aim to help learners make more informed decisions about optimizer selection for training deep learning models.
@@ -83,3 +85,4 @@ For more detailed information about the project's components, refer to the relev
 - **documents/**: Project-related documents and instructions.
 - **presentation_images/**: Slides and screenshots from project presentations.
 - **styles/**: Stylesheets for visual presentation.
+

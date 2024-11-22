@@ -630,7 +630,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 ### Comparison Between Optimizes
 
 | **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
-|----------------------|------------------------------------|-----------------------------|-----------------------------|-----------------------------------|
+|---------------|---------------|---------------|---------------|---------------|
 | **Gradient Descent** | Full gradient each update          | Stable convergence          | Slow, costly                | Small, static datasets            |
 | **SGD**              | One sample/batch per update        | Fast, escapes minima        | High variance, less stable  | Large datasets, limited resources |
 | **Momentum**         | Adds momentum to smooth updates    | Faster, reduces oscillation | Adds tuning complexity      | Oscillatory paths                 |
