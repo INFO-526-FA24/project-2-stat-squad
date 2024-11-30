@@ -174,7 +174,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```
 
-### **Gradient Descent**
+## **Gradient Descent**
 
 -   **Mathematical Intuition:** Gradient Descent updates parameters based on the negative gradient of the loss function. For a function f(x)f(x), the update rule is:
 
@@ -184,55 +184,97 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
 -   **R Implementation:**
 
-    ```{r include=TRUE}
-    # Gradient Descent on Quadratic Function
-    library(ggplot2)
+```{r include=TRUE}
+# Load necessary libraries
+library(ggplot2)
+library(gganimate)
+library(viridis)
 
-    # Gradient Descent Function
-    gradient_descent <- function(x_init, y_init, learning_rate, n_iter) {
-      x <- x_init
-      y <- y_init
-      # Initialize path with initial values for x, y, dx, and dy
-      path <- data.frame(x = x, y = y, dx = NA, dy = NA)
-      
-      for (i in 1:n_iter) {
-        grad_x <- 2 * x  # Gradient with respect to x
-        grad_y <- 2 * y  # Gradient with respect to y
-        dx <- -learning_rate * grad_x
-        dy <- -learning_rate * grad_y
-        x <- x + dx
-        y <- y + dy
-        # Store the updated position and direction (dx, dy)
-        path <- rbind(path, data.frame(x = x, y = y, dx = dx, dy = dy))
-      }
-      
-      return(path)
-    }
+# Gradient Descent Function
+gradient_descent <- function(x_init, y_init, learning_rate, n_iter) {
+  x <- x_init
+  y <- y_init
+  path <- data.frame(step = 0, x = x, y = y, xend = NA, yend = NA)
+  
+  for (i in 1:n_iter) {
+    grad_x <- 2 * x  # Gradient with respect to x
+    grad_y <- 2 * y  # Gradient with respect to y
+    dx <- -learning_rate * grad_x
+    dy <- -learning_rate * grad_y
+    x_new <- x + dx
+    y_new <- y + dy
+    path <- rbind(path, data.frame(step = i, x = x, y = y, xend = x_new, yend = y_new))
+    x <- x_new
+    y <- y_new
+  }
+  
+  return(path)
+}
 
-    # Initial point and learning rate
-    x_init <- 4
-    y_init <- 4
-    learning_rate <- 0.1
-    n_iter <- 50
+# Initial parameters
+x_init <- 4
+y_init <- 4
+learning_rate <- 0.1
+n_iter <- 50
 
-    # Run gradient descent
-    path <- gradient_descent(x_init, y_init, learning_rate, n_iter)
+# Generate path
+path <- gradient_descent(x_init, y_init, learning_rate, n_iter)
 
-    # Plotting the trajectory with arrows to show direction
-    ggplot(path, aes(x = x, y = y)) +
-      geom_path() +
-      geom_point(aes(x = x_init, y = y_init), color = "red") +
-      geom_segment(aes(xend = x + dx, yend = y + dy), 
-                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
-                   size = 0.5) +
-      labs(title = "Gradient Descent Trajectory on f(x, y) = x^2 + y^2") +
-      theme_minimal()
+# Remove rows with missing xend or yend values
+path <- na.omit(path)
 
-    ```
+# Create the quadratic function surface
+x_vals <- seq(-5, 5, length.out = 100)
+y_vals <- seq(-5, 5, length.out = 100)
+grid <- expand.grid(x = x_vals, y = y_vals)
+grid$z <- grid$x^2 + grid$y^2
 
-**Explanation:** In this implementation, we start from an initial point (4,4)(4,4) and iteratively update the values of xx and yy according to the gradient of the quadratic function. The path shows how the optimizer converges to the minimum at (0,0)(0,0).
+# Plotting the gradient descent trajectory with arrows
+plot <- ggplot() +
+  geom_raster(data = grid, aes(x = x, y = y, fill = z), alpha = 0.8) +
+  scale_fill_viridis(name = "f(x, y)", option = "viridis") +
+  geom_segment(
+    data = path,
+    aes(x = x, y = y, xend = xend, yend = yend, group = 1),
+    arrow = arrow(type = "closed", length = unit(0.2, "inches")),
+    color = "white",
+    linewidth = 0.8
+  ) +
+  labs(
+    title = "Gradient Descent Trajectory on f(x, y) = x^2 + y^2",
+    subtitle = "Step: {closest_state}",
+    x = "x",
+    y = "y"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(size = 22, face = "bold"),
+    plot.subtitle = element_text(size = 24, color = 'darkblue'),
+    axis.title = element_text(size = 18),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 14),
+    axis.text = element_text(size = 14)
+  ) +
+  transition_states(path$step, transition_length = 2, state_length = 1) +
+  shadow_mark(size = 0.5, color = "gray")
 
-### **Stochastic Gradient Descent (SGD)**
+# Save as a GIF
+anim_save("gradient_descent_arrows.gif", animation = animate(plot, fps = 5, width = 800, height = 600))
+
+cat("GIF saved as 'gradient_descent_arrows.gif'\n")
+
+
+```
+
+![](gradient_descent_arrows.gif)
+
+**Explanation:** In this visualization, we start at the initial point ( 4 , 4 ) on the surface of the quadratic function 𝑓 ( 𝑥 , 𝑦 ) = 𝑥 2 + 𝑦 2. The gradient descent algorithm iteratively updates the values of 𝑥 and 𝑦 by moving in the direction of the steepest descent, determined by the negative gradient of the function.
+
+At each step, arrows are drawn from the current position to the updated position, showing the direction and magnitude of the movement. The length of each arrow represents the step size, which decreases as we approach the minimum due to the nature of the gradient being proportional to the distance from the origin.
+
+The trajectory clearly illustrates how gradient descent converges toward the global minimum at ( 0 , 0 ), where the function achieves its lowest value. This process highlights how gradient descent works effectively in a smooth, convex landscape like this quadratic function.
+
+## **Stochastic Gradient Descent (SGD)**
 
 -   **Mathematical Intuition:** In **SGD**, instead of using the full gradient, we compute the gradient using a single random data point. This makes the process noisy but can be more efficient in large datasets.
 
@@ -240,54 +282,99 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```{r}
     # Stochastic Gradient Descent on Quadratic Function
+
+    ```
+
+    ```{r }
+    # Load necessary libraries
     library(ggplot2)
+    library(gganimate)
+    library(viridis)
 
     # Stochastic Gradient Descent Function
     stochastic_gradient_descent <- function(x_init, y_init, learning_rate, n_iter) {
       x <- x_init
       y <- y_init
-      # Initialize path with x, y, dx, dy columns for storing positions and direction
-      path <- data.frame(x = x, y = y, dx = NA, dy = NA)
+      path <- data.frame(step = 0, x = x, y = y, xend = NA, yend = NA)
       
       for (i in 1:n_iter) {
-        grad_x <- 2 * x + runif(1, -0.1, 0.1)  # Add noise to gradient for x
-        grad_y <- 2 * y + runif(1, -0.1, 0.1)  # Add noise to gradient for y
-        dx <- -learning_rate * grad_x  # Update for x
-        dy <- -learning_rate * grad_y  # Update for y
-        x <- x + dx
-        y <- y + dy
-        # Append the updated position and direction
-        path <- rbind(path, data.frame(x = x, y = y, dx = dx, dy = dy))
+    grad_x <- 2 * x + runif(1, -0.1, 0.1)  # Add noise to gradient for x
+    grad_y <- 2 * y + runif(1, -0.1, 0.1)  # Add noise to gradient for y
+    dx <- -learning_rate * grad_x
+    dy <- -learning_rate * grad_y
+    x_new <- x + dx
+    y_new <- y + dy
+    path <- rbind(path, data.frame(step = i, x = x, y = y, xend = x_new, yend = y_new))
+    x <- x_new
+    y <- y_new
       }
       
       return(path)
     }
 
-    # Initial point and learning rate
+    # Initial parameters
     x_init <- 4
     y_init <- 4
     learning_rate <- 0.1
     n_iter <- 50
 
-    # Run stochastic gradient descent
+    # Generate path
     path_sgd <- stochastic_gradient_descent(x_init, y_init, learning_rate, n_iter)
 
-    # Plotting the trajectory with arrows to show learning rate direction
-    ggplot(path_sgd, aes(x = x, y = y)) +
-      geom_path() +
-      geom_point(aes(x = x_init, y = y_init), color = "red") +
-      geom_segment(aes(xend = x + dx, yend = y + dy), 
-                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
-                   size = 0.5) +  # Add arrows to show direction
-      labs(title = "SGD Trajectory on f(x, y) = x^2 + y^2 with Noise") +
-      theme_minimal()
+    # Remove rows with missing xend or yend values
+    path_sgd <- na.omit(path_sgd)
 
+    # Create the quadratic function surface
+    x_vals <- seq(-5, 5, length.out = 100)
+    y_vals <- seq(-5, 5, length.out = 100)
+    grid <- expand.grid(x = x_vals, y = y_vals)
+    grid$z <- grid$x^2 + grid$y^2
+
+    # Plotting the stochastic gradient descent trajectory with arrows
+    plot_sgd <- ggplot() +
+      geom_raster(data = grid, aes(x = x, y = y, fill = z), alpha = 0.8) +
+      scale_fill_viridis(name = "f(x, y)", option = "viridis") +
+      geom_segment(
+    data = path_sgd,
+    aes(x = x, y = y, xend = xend, yend = yend, group = 1),
+    arrow = arrow(type = "closed", length = unit(0.2, "inches")),
+    color = "white",
+    linewidth = 0.8
+      ) +
+      labs(
+    title = "Stochastic Gradient Descent (SGD) on f(x, y) = x^2 + y^2",
+    subtitle = "Step: {closest_state}",
+    x = "x",
+    y = "y"
+      ) +
+      theme_minimal() +
+      theme(
+    plot.title = element_text(size = 22, face = "bold"),
+    plot.subtitle = element_text(size = 24, color = 'darkblue'),
+    axis.title = element_text(size = 18),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 14),
+    axis.text = element_text(size = 14)
+      ) +
+      transition_states(path_sgd$step, transition_length = 2, state_length = 1) +
+      shadow_mark(size = 0.5, color = "gray")
+
+    # Save as a GIF
+    anim_save("stochastic_gradient_descent_arrows.gif", animation = animate(plot_sgd, fps = 5, width = 800, height = 600))
+
+    cat("GIF saved as 'stochastic_gradient_descent_arrows.gif'\n")
 
     ```
 
-    **Explanation:** This version of gradient descent introduces noise at each iteration, mimicking the stochastic nature of SGD. It still converges to the minimum, but with oscillations due to the noise.
+    ![](stochastic_gradient_descent_arrows.gif)
 
-### **Momentum Optimizer**
+**Explanation:**  In this visualization, we begin at the initial point ( 4 , 4 ) and update the values of 𝑥 and 𝑦 at each step using the stochastic gradient descent algorithm. Instead of calculating the full gradient, noise is added to the gradient at each iteration to simulate a stochastic environment.
+
+Arrows are used to represent the direction and magnitude of the updates, showing the noisy movement toward the global minimum at ( 0 , 0 ). Unlike standard gradient descent, stochastic gradient descent introduces small oscillations due to the random noise, which can help in escaping local minima in more complex landscapes.
+
+The visualization highlights the efficiency of stochastic gradient descent in large datasets where calculating the full gradient at each step may be computationally expensive. The oscillations, however, underscore the trade-off between stability and speed in optimization.
+
+## **Momentum Optimizer**
 
 -   **Mathematical Intuition:** Momentum is an optimization technique that helps accelerate gradient descent by adding a fraction of the previous update to the current update. This reduces oscillations and helps in faster convergence.
 
@@ -313,51 +400,109 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```{r}
     # Momentum Optimization on Quadratic Function
+    # Load necessary libraries
     library(ggplot2)
+    library(gganimate)
+    library(viridis)
 
-    # Momentum Optimization Function
+    # Momentum Optimizer Function
     momentum_optimizer <- function(x_init, y_init, learning_rate, beta, n_iter) {
       x <- x_init
       y <- y_init
       v_x <- 0  # Initialize velocity for x
       v_y <- 0  # Initialize velocity for y
-      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      path <- data.frame(step = 0, x = x, y = y, xend = NA, yend = NA)
       
       for (i in 1:n_iter) {
-        grad_x <- 2 * x
-        grad_y <- 2 * y
+        grad_x <- 2 * x  # Gradient with respect to x
+        grad_y <- 2 * y  # Gradient with respect to y
         
         # Update velocity
         v_x <- beta * v_x + (1 - beta) * grad_x
         v_y <- beta * v_y + (1 - beta) * grad_y
         
-        # Update parameters (position)
-        x <- x - learning_rate * v_x
-        y <- y - learning_rate * v_y
+        # Update parameters
+        dx <- -learning_rate * v_x
+        dy <- -learning_rate * v_y
+        x_new <- x + dx
+        y_new <- y + dy
         
-        # Store the updated position and step direction (dx, dy)
-        path <- rbind(path, data.frame(x = x, y = y, dx = -learning_rate * v_x, dy = -learning_rate * v_y))
+        path <- rbind(path, data.frame(step = i, x = x, y = y, xend = x_new, yend = y_new))
+        x <- x_new
+        y <- y_new
       }
       
       return(path)
     }
 
-    # Run Momentum Optimization
-    path_momentum <- momentum_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, beta = 0.9, n_iter = 50)
+    # Initial parameters
+    x_init <- 4
+    y_init <- 4
+    learning_rate <- 0.1
+    beta <- 0.9
+    n_iter <- 50
 
-    # Plotting the trajectory with arrows to show direction of learning rate
-    ggplot(path_momentum, aes(x = x, y = y)) +
-      geom_path() +
-      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
-      geom_segment(aes(xend = x + dx, yend = y + dy), 
-                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
-                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
-      labs(title = "Momentum Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
-      theme_minimal()
+    # Generate path
+    path_momentum <- momentum_optimizer(x_init, y_init, learning_rate, beta, n_iter)
+
+    # Remove rows with missing xend or yend values
+    path_momentum <- na.omit(path_momentum)
+
+    # Create the quadratic function surface
+    x_vals <- seq(-5, 5, length.out = 100)
+    y_vals <- seq(-5, 5, length.out = 100)
+    grid <- expand.grid(x = x_vals, y = y_vals)
+    grid$z <- grid$x^2 + grid$y^2
+
+    # Plotting the momentum optimizer trajectory with arrows
+    plot_momentum <- ggplot() +
+      geom_raster(data = grid, aes(x = x, y = y, fill = z), alpha = 0.8) +
+      scale_fill_viridis(name = "f(x, y)", option = "viridis") +
+      geom_segment(
+        data = path_momentum,
+        aes(x = x, y = y, xend = xend, yend = yend, group = 1),
+        arrow = arrow(type = "closed", length = unit(0.2, "inches")),
+        color = "white",
+        linewidth = 0.8
+      ) +
+      labs(
+        title = "Momentum Optimizer on f(x, y) = x^2 + y^2",
+        subtitle = "Step: {closest_state}",
+        x = "x",
+        y = "y"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 22, face = "bold"),
+        plot.subtitle = element_text(size = 24, color = 'darkblue'),
+        axis.title = element_text(size = 18),
+        legend.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        axis.text = element_text(size = 14)
+      ) +
+      transition_states(path_momentum$step, transition_length = 2, state_length = 1) +
+      shadow_mark(size = 0.5, color = "gray")
+
+    # Save as a GIF
+    anim_save("momentum_optimizer_arrows.gif", animation = animate(plot_momentum, fps = 5, width = 800, height = 600))
+
+    cat("GIF saved as 'momentum_optimizer_arrows.gif'\n")
 
     ```
 
-### **AdaGrad Optimizer**
+    ![](momentum_optimizer_arrows.gif)
+
+### **Explanation**:
+
+This visualization starts at the initial point (4,4) and simulates the updates using the momentum optimization technique. At each step:
+
+-   The gradient is calculated, and a fraction of the previous velocity is added to the current gradient update.
+
+-   This velocity term reduces oscillations and accelerates convergence toward the global minimum.
+
+Arrows indicate the direction and magnitude of updates. The momentum term helps the optimizer move smoothly and quickly, demonstrating how it handles optimization in a convex landscape.
+
+## **AdaGrad Optimizer**
 
 -   **Mathematical Intuition:** AdaGrad adapts the learning rate for each parameter based on the historical gradients. Parameters that have frequently large gradients get smaller updates, and parameters with infrequent large gradients get larger updates.
 
@@ -386,53 +531,100 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 -   **R Implementation:**
 
     ```{r}
-    library(ggplot2)
-
-    # AdaGrad Optimization Function
+    # AdaGrad Optimizer Function
     adagrad_optimizer <- function(x_init, y_init, learning_rate, epsilon, n_iter) {
       x <- x_init
       y <- y_init
       G_x <- 0  # Initialize sum of squared gradients for x
       G_y <- 0  # Initialize sum of squared gradients for y
-      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      path <- data.frame(step = 0, x = x, y = y, xend = NA, yend = NA)
       
       for (i in 1:n_iter) {
-        grad_x <- 2 * x
-        grad_y <- 2 * y
-        
-        # Update sum of squared gradients
-        G_x <- G_x + grad_x^2
-        G_y <- G_y + grad_y^2
-        
-        # Update parameters (position)
-        x <- x - (learning_rate / (sqrt(G_x) + epsilon)) * grad_x
-        y <- y - (learning_rate / (sqrt(G_y) + epsilon)) * grad_y
-        
-        # Store the updated position and the direction based on the adaptive learning rate
-        path <- rbind(path, data.frame(x = x, y = y, 
-                                       dx = - (learning_rate / (sqrt(G_x) + epsilon)) * grad_x, 
-                                       dy = - (learning_rate / (sqrt(G_y) + epsilon)) * grad_y))
+    grad_x <- 2 * x  # Gradient with respect to x
+    grad_y <- 2 * y  # Gradient with respect to y
+
+    # Update sum of squared gradients
+    G_x <- G_x + grad_x^2
+    G_y <- G_y + grad_y^2
+
+    # Update parameters
+    dx <- -(learning_rate / (sqrt(G_x) + epsilon)) * grad_x
+    dy <- -(learning_rate / (sqrt(G_y) + epsilon)) * grad_y
+    x_new <- x + dx
+    y_new <- y + dy
+
+    path <- rbind(path, data.frame(step = i, x = x, y = y, xend = x_new, yend = y_new))
+    x <- x_new
+    y <- y_new
       }
       
       return(path)
     }
 
-    # Run AdaGrad Optimization
-    path_adagrad <- adagrad_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, epsilon = 1e-8, n_iter = 50)
+    # Initial parameters
+    x_init <- 4
+    y_init <- 4
+    learning_rate <- 0.1
+    epsilon <- 1e-8
+    n_iter <- 50
 
-    # Plotting the trajectory with arrows to show direction of learning rate
-    ggplot(path_adagrad, aes(x = x, y = y)) +
-      geom_path() +
-      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
-      geom_segment(aes(xend = x + dx, yend = y + dy), 
-                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
-                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
-      labs(title = "AdaGrad Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
-      theme_minimal()
+    # Generate path
+    path_adagrad <- adagrad_optimizer(x_init, y_init, learning_rate, epsilon, n_iter)
+
+    # Remove rows with missing xend or yend values
+    path_adagrad <- na.omit(path_adagrad)
+
+    # Create the quadratic function surface
+    x_vals <- seq(-5, 5, length.out = 100)
+    y_vals <- seq(-5, 5, length.out = 100)
+    grid <- expand.grid(x = x_vals, y = y_vals)
+    grid$z <- grid$x^2 + grid$y^2
+
+    # Plotting the AdaGrad optimizer trajectory with arrows
+    plot_adagrad <- ggplot() +
+      geom_raster(data = grid, aes(x = x, y = y, fill = z), alpha = 0.8) +
+      scale_fill_viridis(name = "f(x, y)", option = "viridis") +
+      geom_segment(
+    data = path_adagrad,
+    aes(x = x, y = y, xend = xend, yend = yend, group = 1),
+    arrow = arrow(type = "closed", length = unit(0.2, "inches")),
+    color = "white",
+    linewidth = 0.8
+      ) +
+      labs(
+    title = "AdaGrad Optimizer on f(x, y) = x^2 + y^2",
+    subtitle = "Step: {closest_state}",
+    x = "x",
+    y = "y"
+      ) +
+      theme_minimal() +
+      theme(
+    plot.title = element_text(size = 22, face = "bold"),
+    plot.subtitle = element_text(size = 24, color = 'darkblue'),
+    axis.title = element_text(size = 18),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 14),
+    axis.text = element_text(size = 14)
+      ) +
+      transition_states(path_adagrad$step, transition_length = 2, state_length = 1) +
+      shadow_mark(size = 0.5, color = "gray")
+
+    # Save as a GIF
+    anim_save("adagrad_optimizer_arrows.gif", animation = animate(plot_adagrad, fps = 5, width = 800, height = 600))
+
+    cat("GIF saved as 'adagrad_optimizer_arrows.gif'\n")
 
     ```
 
-### **RMSProp Optimizer**
+    ![](adagrad_optimizer_arrows.gif)
+
+### **Explanation**:
+
+In this visualization:
+
+We start at the initial point ( 4 , 4 ) on the quadratic surface 𝑓 ( 𝑥 , 𝑦 ) = 𝑥 2 + 𝑦 2 . The AdaGrad optimizer updates the learning rate for each parameter adaptively, based on the accumulated squared gradients. Parameters with frequently large gradients get smaller updates. Parameters with infrequent large gradients get larger updates. Arrows represent the direction and magnitude of updates at each step. The trajectory converges toward the global minimum at ( 0 , 0 ), demonstrating how AdaGrad adjusts its learning rate dynamically to achieve convergence in a smooth, convex optimization landscape.
+
+## **RMSProp Optimizer**
 
 -   **Mathematical Intuition:** RMSProp is an adaptive learning rate method that divides the learning rate by a moving average of the squared gradients. It works similarly to AdaGrad but with a smoothing term to prevent the learning rate from decaying too quickly.
 
@@ -470,54 +662,116 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```{r}
     # RMSProp Optimization on Quadratic Function
+    # Load necessary libraries
     library(ggplot2)
+    library(gganimate)
+    library(viridis)
 
-    # RMSProp Optimization Function
+    # RMSProp Optimizer Function
     rmsprop_optimizer <- function(x_init, y_init, learning_rate, beta, epsilon, n_iter) {
       x <- x_init
       y <- y_init
       v_x <- 0  # Initialize moving average for x
       v_y <- 0  # Initialize moving average for y
-      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      path <- data.frame(step = 0, x = x, y = y, xend = NA, yend = NA)
       
       for (i in 1:n_iter) {
-        grad_x <- 2 * x
-        grad_y <- 2 * y
-        
-        # Update moving averages of squared gradients
-        v_x <- beta * v_x + (1 - beta) * grad_x^2
-        v_y <- beta * v_y + (1 - beta) * grad_y^2
-        
-        # Update parameters (position)
-        x <- x - (learning_rate / (sqrt(v_x) + epsilon)) * grad_x
-        y <- y - (learning_rate / (sqrt(v_y) + epsilon)) * grad_y
-        
-        # Store the updated position and direction based on the adaptive learning rate
-        path <- rbind(path, data.frame(x = x, y = y, 
-                                       dx = - (learning_rate / (sqrt(v_x) + epsilon)) * grad_x, 
-                                       dy = - (learning_rate / (sqrt(v_y) + epsilon)) * grad_y))
+    grad_x <- 2 * x  # Gradient with respect to x
+    grad_y <- 2 * y  # Gradient with respect to y
+
+    # Update moving averages of squared gradients
+    v_x <- beta * v_x + (1 - beta) * grad_x^2
+    v_y <- beta * v_y + (1 - beta) * grad_y^2
+
+    # Update parameters
+    dx <- -(learning_rate / (sqrt(v_x) + epsilon)) * grad_x
+    dy <- -(learning_rate / (sqrt(v_y) + epsilon)) * grad_y
+    x_new <- x + dx
+    y_new <- y + dy
+
+    path <- rbind(path, data.frame(step = i, x = x, y = y, xend = x_new, yend = y_new))
+    x <- x_new
+    y <- y_new
       }
       
       return(path)
     }
 
-    # Run RMSProp Optimization
-    path_rmsprop <- rmsprop_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, beta = 0.9, epsilon = 1e-8, n_iter = 50)
+    # Initial parameters
+    x_init <- 4
+    y_init <- 4
+    learning_rate <- 0.1
+    beta <- 0.9
+    epsilon <- 1e-8
+    n_iter <- 50
 
-    # Plotting the trajectory with arrows to show direction of learning rate
-    ggplot(path_rmsprop, aes(x = x, y = y)) +
-      geom_path() +
-      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
-      geom_segment(aes(xend = x + dx, yend = y + dy), 
-                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
-                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
-      labs(title = "RMSProp Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
-      theme_minimal()
+    # Generate path
+    path_rmsprop <- rmsprop_optimizer(x_init, y_init, learning_rate, beta, epsilon, n_iter)
 
+    # Remove rows with missing xend or yend values
+    path_rmsprop <- na.omit(path_rmsprop)
+
+    # Create the quadratic function surface
+    x_vals <- seq(-5, 5, length.out = 100)
+    y_vals <- seq(-5, 5, length.out = 100)
+    grid <- expand.grid(x = x_vals, y = y_vals)
+    grid$z <- grid$x^2 + grid$y^2
+
+    # Plotting the RMSProp optimizer trajectory with arrows
+    plot_rmsprop <- ggplot() +
+      geom_raster(data = grid, aes(x = x, y = y, fill = z), alpha = 0.8) +
+      scale_fill_viridis(name = "f(x, y)", option = "viridis") +
+      geom_segment(
+    data = path_rmsprop,
+    aes(x = x, y = y, xend = xend, yend = yend, group = 1),
+    arrow = arrow(type = "closed", length = unit(0.2, "inches")),
+    color = "white",
+    linewidth = 0.8
+      ) +
+      labs(
+    title = "RMSProp Optimizer on f(x, y) = x^2 + y^2",
+    subtitle = "Step: {closest_state}",
+    x = "x",
+    y = "y"
+      ) +
+      theme_minimal() +
+      theme(
+    plot.title = element_text(size = 22, face = "bold"),
+    plot.subtitle = element_text(size = 24, color = 'darkblue'),
+    axis.title = element_text(size = 18),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 14),
+    axis.text = element_text(size = 14)
+      ) +
+      transition_states(path_rmsprop$step, transition_length = 2, state_length = 1) +
+      shadow_mark(size = 0.5, color = "gray")
+
+    # Save as a GIF
+    anim_save("rmsprop_optimizer_arrows.gif", animation = animate(plot_rmsprop, fps = 5, width = 800, height = 600))
+
+    cat("GIF saved as 'rmsprop_optimizer_arrows.gif'\n")
 
     ```
 
-### **Adam Optimizer**
+![](rmsprop_optimizer_arrows.gif)
+
+### **Explanation**:
+
+In this visualization:
+
+1.  We start at the initial point (4,4) on the quadratic surface f(x, y) = x\^2 + y\^2.
+
+2.  The RMSProp optimizer updates the learning rate dynamically using a moving average of the squared gradients. This ensures:
+
+    -   Gradients that occur frequently do not overly diminish the learning rate.
+
+    -   Gradients that occur rarely still allow meaningful updates.
+
+3.  The momentum-like smoothing term (β) helps prevent the learning rate from decaying too quickly, unlike AdaGrad.
+
+Arrows represent the direction and magnitude of updates, showcasing the efficiency of RMSProp in converging toward the global minimum at (0,0). This visualization highlights the balance RMSProp strikes between learning rate adaptability and update stability.
+
+## **Adam Optimizer**
 
 -   **Mathematical Intuition:** Adam (Adaptive Moment Estimation) combines the ideas of both **Momentum** and **RMSProp**. It tracks both the first moment (mean) and second moment (variance) of the gradients to adapt the learning rate for each parameter. It also uses bias correction to account for the initialization of the first and second moment estimates.
 
@@ -571,6 +825,12 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
     library(ggplot2)
 
     # Adam Optimization Function with Learning Rate Direction
+    # Load necessary libraries
+    library(ggplot2)
+    library(gganimate)
+    library(viridis)
+
+    # Adam Optimizer Function
     adam_optimizer <- function(x_init, y_init, learning_rate, beta1, beta2, epsilon, n_iter) {
       x <- x_init
       y <- y_init
@@ -578,11 +838,11 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
       m_y <- 0  # Initialize first moment estimate for y
       v_x <- 0  # Initialize second moment estimate for x
       v_y <- 0  # Initialize second moment estimate for y
-      path <- data.frame(x = x, y = y, dx = NA, dy = NA)  # Track position and direction
+      path <- data.frame(step = 0, x = x, y = y, xend = NA, yend = NA)
       
       for (i in 1:n_iter) {
-        grad_x <- 2 * x  # Gradient for x
-        grad_y <- 2 * y  # Gradient for y
+        grad_x <- 2 * x  # Gradient with respect to x
+        grad_y <- 2 * y  # Gradient with respect to y
         
         # Update first moment estimate (mean of gradients)
         m_x <- beta1 * m_x + (1 - beta1) * grad_x
@@ -599,35 +859,95 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
         v_y_hat <- v_y / (1 - beta2^i)
         
         # Update parameters
-        dx <- (learning_rate / (sqrt(v_x_hat) + epsilon)) * m_x_hat
-        dy <- (learning_rate / (sqrt(v_y_hat) + epsilon)) * m_y_hat
+        dx <- -(learning_rate / (sqrt(v_x_hat) + epsilon)) * m_x_hat
+        dy <- -(learning_rate / (sqrt(v_y_hat) + epsilon)) * m_y_hat
+        x_new <- x + dx
+        y_new <- y + dy
         
-        x <- x - dx
-        y <- y - dy
-        
-        # Save parameter updates and directions for plotting
-        path <- rbind(path, data.frame(x = x, y = y, dx = -dx, dy = -dy))
+        path <- rbind(path, data.frame(step = i, x = x, y = y, xend = x_new, yend = y_new))
+        x <- x_new
+        y <- y_new
       }
       
       return(path)
     }
 
-    # Run Adam Optimization
-    path_adam <- adam_optimizer(x_init = 4, y_init = 4, learning_rate = 0.1, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8, n_iter = 50)
+    # Initial parameters
+    x_init <- 4
+    y_init <- 4
+    learning_rate <- 0.1
+    beta1 <- 0.9
+    beta2 <- 0.999
+    epsilon <- 1e-8
+    n_iter <- 50
 
-    # Plotting the trajectory with arrows to show direction of learning rate
-    ggplot(path_adam, aes(x = x, y = y)) +
-      geom_path() +
-      geom_point(aes(x = 4, y = 4), color = "red") +  # Starting point (red)
-      geom_segment(aes(xend = x + dx, yend = y + dy), 
-                   arrow = arrow(type = "closed", length = unit(0.2, "inches")), 
-                   size = 0.5, color = "blue") +  # Arrows showing direction of learning rate
-      labs(title = "Adam Optimizer with Learning Rate Direction on f(x, y) = x^2 + y^2") +
-      theme_minimal()
+    # Generate path
+    path_adam <- adam_optimizer(x_init, y_init, learning_rate, beta1, beta2, epsilon, n_iter)
+
+    # Remove rows with missing xend or yend values
+    path_adam <- na.omit(path_adam)
+
+    # Create the quadratic function surface
+    x_vals <- seq(-5, 5, length.out = 100)
+    y_vals <- seq(-5, 5, length.out = 100)
+    grid <- expand.grid(x = x_vals, y = y_vals)
+    grid$z <- grid$x^2 + grid$y^2
+
+    # Plotting the Adam optimizer trajectory with arrows
+    plot_adam <- ggplot() +
+      geom_raster(data = grid, aes(x = x, y = y, fill = z), alpha = 0.8) +
+      scale_fill_viridis(name = "f(x, y)", option = "viridis") +
+      geom_segment(
+        data = path_adam,
+        aes(x = x, y = y, xend = xend, yend = yend, group = 1),
+        arrow = arrow(type = "closed", length = unit(0.2, "inches")),
+        color = "white",
+        linewidth = 0.8
+      ) +
+      labs(
+        title = "Adam Optimizer on f(x, y) = x^2 + y^2",
+        subtitle = "Step: {closest_state}",
+        x = "x",
+        y = "y"
+      ) +
+      theme_minimal() +
+      theme(
+        plot.title = element_text(size = 22, face = "bold"),
+        plot.subtitle = element_text(size = 24, color = 'darkblue'),
+        axis.title = element_text(size = 18),
+        legend.title = element_text(size = 18),
+        legend.text = element_text(size = 14),
+        axis.text = element_text(size = 14)
+      ) +
+      transition_states(path_adam$step, transition_length = 2, state_length = 1) +
+      shadow_mark(size = 0.5, color = "gray")
+
+    # Save as a GIF
+    anim_save("adam_optimizer_arrows.gif", animation = animate(plot_adam, fps = 5, width = 800, height = 600))
+
+    cat("GIF saved as 'adam_optimizer_arrows.gif'\n")
 
     ```
 
-### Comparison Between Optimizes
+    ![](adam_optimizer_arrows.gif)
+
+### **Explanation**:
+
+In this visualization:
+
+1.  The optimizer starts at the initial point (4,4) on the quadratic surface f(x, y) = x\^2 + y\^2.
+
+2.  **Adam** combines the benefits of:
+
+    -   **Momentum**: Using the first moment estimate (mtm_tmt​) to smooth updates and reduce oscillations.
+
+    -   **RMSProp**: Using the second moment estimate (vtv_tvt​) to adapt the learning rate dynamically for each parameter.
+
+3.  Bias correction ensures that the first few updates are unbiased, despite starting with zero moments.
+
+Arrows represent the direction and magnitude of updates at each step, showing the optimizer’s ability to adapt learning rates and converge efficiently to the global minimum at (0,0).
+
+## Comparison Between Optimizers
 
 | **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
 |---------------|---------------|---------------|---------------|---------------|
@@ -638,7 +958,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 | **RMSProp**          | Moving avg. squared gradients      | Solves AdaGrad decay issue  | Needs decay rate tuning     | Non-stationary tasks (e.g., RNNs) |
 | **Adam**             | Combines Momentum + RMSProp        | Fast, robust to noise       | Complex, more tuning needed | General-purpose neural networks   |
 
-### Animation of how the different optimizers behave
+## Comparing the different optimizers behaviour
 
 ```{r}
 # Load necessary libraries
@@ -819,12 +1139,12 @@ animated_plot <- ggplot() +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(size = 20, face = "bold"),
-    plot.subtitle = element_text(size = 16),
-    legend.title = element_text(size = 14),
-    legend.text = element_text(size = 12),
-    axis.title = element_text(size = 14),
-    axis.text = element_text(size = 12)
+    plot.title = element_text(size = 22, face = "bold"),
+    plot.subtitle = element_text(size = 22),
+    legend.title = element_text(size = 18),
+    legend.text = element_text(size = 14),
+    axis.title = element_text(size = 18),
+    axis.text = element_text(size = 14)
   ) +
   transition_states(step, wrap = FALSE)
 
@@ -834,14 +1154,34 @@ animate(animated_plot, fps = 5, width = 800, height = 600, renderer = gifski_ren
 
 ![](optimization_3d_fixed.gif)
 
-### Key Points
+### **Efficiency Comparison**
 
--   **Adam** is versatile and works well with noisy data.
+1.  **Speed**:
 
--   **SGD** is efficient and helps in escaping local minima.
+    -   **Fastest**: Adam, RMSProp, and SGD (for large datasets).
 
--   **AdaGrad** is effective for sparse features but suffers from decaying rates.
+    -   **Slowest**: Gradient Descent due to computation over the entire dataset at each step.
 
--   **RMSProp** is better for non-stationary objectives, like time-series.
+2.  **Convergence Stability**:
+
+    -   **Stable**: Momentum, Adam, and RMSProp are robust to oscillations.
+
+    -   **Noisy**: SGD can oscillate or overshoot due to randomness.
+
+3.  **Adaptability**:
+
+    -   **Most Adaptive**: Adam (adjusts learning rate dynamically for each parameter).
+
+    -   **Least Adaptive**: Gradient Descent (fixed learning rate for all parameters).
+
+4.  **Handling Sparse Data**:
+
+    -   **Best**: AdaGrad and Adam are designed for sparse gradients.
+
+    -   **Worst**: Gradient Descent and Momentum may struggle without careful tuning.
+
+### **Conclusion**
+
+-   **Adam** is widely regarded as the most efficient and versatile optimizer for general use cases due to its adaptive nature, fast convergence, and stability. However, for very specific tasks, other methods like RMSProp or AdaGrad may perform better.
 
 ## Exploring Optimizers on Real World Data
