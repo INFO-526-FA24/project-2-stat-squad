@@ -958,7 +958,7 @@ Arrows represent the direction and magnitude of updates at each step, showing th
 | **RMSProp**          | Moving avg. squared gradients      | Solves AdaGrad decay issue  | Needs decay rate tuning     | Non-stationary tasks (e.g., RNNs) |
 | **Adam**             | Combines Momentum + RMSProp        | Fast, robust to noise       | Complex, more tuning needed | General-purpose neural networks   |
 
-## Comparing the different optimizers behaviour
+## Visualizing the different optimizers behavior
 
 ```{r}
 # Load necessary libraries
