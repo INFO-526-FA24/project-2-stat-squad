@@ -246,6 +246,7 @@ plot <- ggplot() +
     x = "x",
     y = "y"
   ) +
+  coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
   theme_minimal() +
   theme(
     plot.title = element_text(size = 22, face = "bold"),
@@ -347,6 +348,7 @@ The trajectory clearly illustrates how gradient descent converges toward the glo
     x = "x",
     y = "y"
       ) +
+      coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
       theme_minimal() +
       theme(
     plot.title = element_text(size = 22, face = "bold"),
@@ -471,6 +473,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
         x = "x",
         y = "y"
       ) +
+      coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
       theme_minimal() +
       theme(
         plot.title = element_text(size = 22, face = "bold"),
@@ -597,6 +600,7 @@ Arrows indicate the direction and magnitude of updates. The momentum term helps 
     x = "x",
     y = "y"
       ) +
+      coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
       theme_minimal() +
       theme(
     plot.title = element_text(size = 22, face = "bold"),
@@ -734,6 +738,7 @@ We start at the initial point ( 4 , 4 ) on the quadratic surface 𝑓 ( 𝑥 , �
     x = "x",
     y = "y"
       ) +
+      coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
       theme_minimal() +
       theme(
     plot.title = element_text(size = 22, face = "bold"),
@@ -910,6 +915,7 @@ Arrows represent the direction and magnitude of updates, showcasing the efficien
         x = "x",
         y = "y"
       ) +
+      coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
       theme_minimal() +
       theme(
         plot.title = element_text(size = 22, face = "bold"),
@@ -950,7 +956,7 @@ Arrows represent the direction and magnitude of updates at each step, showing th
 ## Comparison Between Optimizers
 
 | **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
-|---------------|---------------|---------------|---------------|---------------|
+|----------------------|------------------------------------|-----------------------------|-----------------------------|-----------------------------------|
 | **Gradient Descent** | Full gradient each update          | Stable convergence          | Slow, costly                | Small, static datasets            |
 | **SGD**              | One sample/batch per update        | Fast, escapes minima        | High variance, less stable  | Large datasets, limited resources |
 | **Momentum**         | Adds momentum to smooth updates    | Faster, reduces oscillation | Adds tuning complexity      | Oscillatory paths                 |
@@ -1137,6 +1143,7 @@ animated_plot <- ggplot() +
     x = "X",
     y = "Y"
   ) +
+  coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
   theme_minimal() +
   theme(
     plot.title = element_text(size = 22, face = "bold"),
@@ -1185,3 +1192,60 @@ animate(animated_plot, fps = 5, width = 800, height = 600, renderer = gifski_ren
 -   **Adam** is widely regarded as the most efficient and versatile optimizer for general use cases due to its adaptive nature, fast convergence, and stability. However, for very specific tasks, other methods like RMSProp or AdaGrad may perform better.
 
 ## Exploring Optimizers on Real World Data
+
+## 2D static images
+
+```{r}
+# Required Libraries
+library(ggplot2)
+library(dplyr)
+library(viridis)
+
+# Function to plot optimizer trajectory with arrows and step numbers
+plot_optimizer_with_arrows <- function(trajectory, title) {
+  ggplot() +
+    # Surface plot
+    geom_tile(data = surface, aes(x = x, y = y, fill = z), alpha = 0.8) +
+    scale_fill_viridis_c(name = "f(X, Y)") +
+    # Trajectory arrows with black border
+    geom_segment(data = trajectory, aes(x = x, y = y, xend = lead(x), yend = lead(y)), 
+                 arrow = arrow(type = "closed", length = unit(0.1, "inches")), 
+                 color = "black", size = 0.8) +  # Black border for arrows
+    geom_segment(data = trajectory, aes(x = x, y = y, xend = lead(x), yend = lead(y)), 
+                 arrow = arrow(type = "closed", length = unit(0.1, "inches")), 
+                 color = "white", size = 0.5) +     # Red inner arrow
+    # Step labels
+    geom_text_repel(data = trajectory, aes(x = x, y = y, label = step), size = 3, color = "white", vjust = -2) +
+    labs(
+      title = title,
+      x = "X",
+      y = "Y"
+    ) +
+    coord_cartesian(xlim = c(-2, 5), ylim = c(-2, 5)) +  # Set axis limits
+    theme_bw() +
+    theme(
+      plot.title = element_text(size = 22, face = "bold"),
+      axis.title = element_text(size = 16),
+      axis.text = element_text(size = 14),
+      legend.text = element_text(size = 14),
+      legend.title = element_text(size = 14)
+    )
+}
+
+# Generate trajectories for each optimizer
+gradient_trajectory <- gradient_descent(4, 4, learning_rate = 0.1, n_iter = 50)
+sgd_trajectory <- stochastic_gradient_descent(4, 4, learning_rate = 0.1, n_iter = 50)
+momentum_trajectory <- momentum_optimizer(4, 4, learning_rate = 0.1, beta = 0.9, n_iter = 50)
+adagrad_trajectory <- adagrad_optimizer(4, 4, learning_rate = 0.1, epsilon = 1e-8, n_iter = 50)
+rmsprop_trajectory <- rmsprop_optimizer(4, 4, learning_rate = 0.1, beta = 0.9, epsilon = 1e-8, n_iter = 50)
+adam_trajectory <- adam_optimizer(4, 4, learning_rate = 0.1, beta1 = 0.9, beta2 = 0.999, epsilon = 1e-8, n_iter = 50)
+
+# Create and save plots for each optimizer
+ggsave("gradient_descent_arrows.png", plot_optimizer_with_arrows(gradient_trajectory, "Gradient Descent Trajectory"), width = 8, height = 6)
+ggsave("sgd_arrows.png", plot_optimizer_with_arrows(sgd_trajectory, "SGD Trajectory"), width = 8, height = 6)
+ggsave("momentum_arrows.png", plot_optimizer_with_arrows(momentum_trajectory, "Momentum Trajectory"), width = 8, height = 6)
+ggsave("adagrad_arrows.png", plot_optimizer_with_arrows(adagrad_trajectory, "AdaGrad Trajectory"), width = 8, height = 6)
+ggsave("rmsprop_arrows.png", plot_optimizer_with_arrows(rmsprop_trajectory, "RMSProp Trajectory"), width = 8, height = 6)
+ggsave("adam_arrows.png", plot_optimizer_with_arrows(adam_trajectory, "Adam Trajectory"), width = 8, height = 6)
+
+```
