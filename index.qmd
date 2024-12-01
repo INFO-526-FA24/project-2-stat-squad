@@ -29,41 +29,35 @@ This project focuses on six popular gradient descent-based optimizers: **Gradie
 
 The goal of this project is to visually demonstrate the convergence behaviors and efficiency of these optimizers in various optimization landscapes, such as convex, non-convex, and saddle-point surfaces. Using both synthetic data and real-world examples, the project will explore how each optimizer performs across different types of loss surfaces. By generating dynamic, animated visualizations, we aim to provide a deeper understanding of how each optimizer functions, offering a valuable tool for students and practitioners to choose the right optimization technique for their machine learning models.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-# Loading required packages
-library(tidyverse)
-library(tidytuesdayR)
-library(broom)
-library(kableExtra)
-library(ggplot2)
-library(gganimate)
-library(dplyr)
-library(tidyr)
-library(viridis)
-library(ggrepel)  # For repelling labels
+```{r}
+#| label: load-packages
+#| include: false
 
+# Load packages here
+pacman::p_load(tidyverse, tidytuesdayR, broom, kableExtra, ggplot2, 
+               gganimate, dplyr, tidyr, viridis, ggrepel)
 ```
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 
-# Define the function to read dataset from a URL
-readUrl <- function(url) {
-  tryCatch(
-    expr = {
-      plastics <- readr::read_csv(url)
-      message("Your dataset has been downloaded and saved!")
-      return(plastics)
-    },
-    error = function(e) { 
-      message("Error downloading the dataset: ", e$message)
-      return(NULL)
-    }
-  )
-}
-
-url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv"
-
-# Load the dataset
+# # Define the function to read dataset from a URL
+# readUrl <- function(url) {
+#   tryCatch(
+#     expr = {
+#       plastics <- readr::read_csv(url)
+#       message("Your dataset has been downloaded and saved!")
+#       return(plastics)
+#     },
+#     error = function(e) { 
+#       message("Error downloading the dataset: ", e$message)
+#       return(NULL)
+#     }
+#   )
+# }
+# 
+# url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv"
+# 
+# # Load the dataset
 
 ```
 
@@ -956,7 +950,7 @@ Arrows represent the direction and magnitude of updates at each step, showing th
 ## Comparison Between Optimizers
 
 | **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
-|----------------------|------------------------------------|-----------------------------|-----------------------------|-----------------------------------|
+|---------------|---------------|---------------|---------------|---------------|
 | **Gradient Descent** | Full gradient each update          | Stable convergence          | Slow, costly                | Small, static datasets            |
 | **SGD**              | One sample/batch per update        | Fast, escapes minima        | High variance, less stable  | Large datasets, limited resources |
 | **Momentum**         | Adds momentum to smooth updates    | Faster, reduces oscillation | Adds tuning complexity      | Oscillatory paths                 |
