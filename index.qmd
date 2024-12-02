@@ -38,29 +38,6 @@ pacman::p_load(tidyverse, tidytuesdayR, broom, kableExtra, ggplot2,
                gganimate, dplyr, tidyr, viridis, ggrepel)
 ```
 
-```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
-
-# # Define the function to read dataset from a URL
-# readUrl <- function(url) {
-#   tryCatch(
-#     expr = {
-#       plastics <- readr::read_csv(url)
-#       message("Your dataset has been downloaded and saved!")
-#       return(plastics)
-#     },
-#     error = function(e) { 
-#       message("Error downloading the dataset: ", e$message)
-#       return(NULL)
-#     }
-#   )
-# }
-# 
-# url <- "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-01-26/plastics.csv"
-# 
-# # Load the dataset
-
-```
-
 ## **Approach:**
 
 #### **1. Synthetic Data**
@@ -949,14 +926,14 @@ Arrows represent the direction and magnitude of updates at each step, showing th
 
 ## Comparison Between Optimizers
 
-| **Optimizer** | **Description** | **Pros** | **Cons** | **Best Use** |
+| **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
 |---------------|---------------|---------------|---------------|---------------|
-| **Gradient Descent** | Full gradient each update | Stable convergence | Slow, costly | Small, static datasets |
-| **SGD** | One sample/batch per update | Fast, escapes minima | High variance, less stable | Large datasets, limited resources |
-| **Momentum** | Adds momentum to smooth updates | Faster, reduces oscillation | Adds tuning complexity | Oscillatory paths |
-| **AdaGrad** | Adapts learning rate per parameter | Good for sparse data | Learning rate decays | Sparse datasets |
-| **RMSProp** | Moving avg. squared gradients | Solves AdaGrad decay issue | Needs decay rate tuning | Non-stationary tasks (e.g., RNNs) |
-| **Adam** | Combines Momentum + RMSProp | Fast, robust to noise | Complex, more tuning needed | General-purpose neural networks |
+| **Gradient Descent** | Full gradient each update          | Stable convergence          | Slow, costly                | Small, static datasets            |
+| **SGD**              | One sample/batch per update        | Fast, escapes minima        | High variance, less stable  | Large datasets, limited resources |
+| **Momentum**         | Adds momentum to smooth updates    | Faster, reduces oscillation | Adds tuning complexity      | Oscillatory paths                 |
+| **AdaGrad**          | Adapts learning rate per parameter | Good for sparse data        | Learning rate decays        | Sparse datasets                   |
+| **RMSProp**          | Moving avg. squared gradients      | Solves AdaGrad decay issue  | Needs decay rate tuning     | Non-stationary tasks (e.g., RNNs) |
+| **Adam**             | Combines Momentum + RMSProp        | Fast, robust to noise       | Complex, more tuning needed | General-purpose neural networks   |
 
 ## Visualizing the different optimizers behavior
 
@@ -1373,6 +1350,3 @@ animate(p, nframes = 100, fps = 10, width = 800, height = 600, renderer = gifski
 
 
 ```
-
-
-
