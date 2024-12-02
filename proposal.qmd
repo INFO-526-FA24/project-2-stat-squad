@@ -136,7 +136,7 @@ The project will introduce a new skill by employing R’s animation capabilities
 The table below explains the steps to tackle our research questions on this project, including the team member(s) assigned for each task, and the week to work on it.
 
 | Task Name                             | Status      | Assignee       | Due    | Priority | Summary                                                                |
-|----------|----------|----------|----------|----------|-----------------------|
+|---------------------------------------|-------------|----------------|--------|----------|------------------------------------------------------------------------|
 | Data Selection                        | Completed   | PG, PK, XD, RK | Week 1 | High     | Select the dataset.                                                    |
 | Cleaning the data and preprocessing   | In Progress | PG, PK, XD, RK | Week 2 | High     | Clean and transform data, prepare the dataset for further analysis.    |
 | Data visualization and analysis       | Not Started | PG, PK, XD, RK | Week 3 | Moderate | EDA, generate visualizations and identify patterns                     |

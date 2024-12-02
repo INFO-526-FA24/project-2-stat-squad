@@ -17,6 +17,7 @@ execute:
   echo: false
 ---
 
+
 ## Abstract
 
 This project aims to provide an in-depth visual analysis of various gradient descent-based optimization algorithms, including Gradient Descent, Stochastic Gradient Descent (SGD), Momentum, AdaGrad, RMSProp, and Adam. By simulating these optimizers on different synthetic loss landscapes and applying them to a real-world dataset, the project will explore their distinct convergence behaviors, efficiency, and adaptability. Through dynamic visualizations and interactive tools, the project will help users understand the strengths and limitations of each optimizer, enabling better selection of optimization techniques for different machine learning tasks.
@@ -29,6 +30,7 @@ This project focuses on six popular gradient descent-based optimizers: **Gradie
 
 The goal of this project is to visually demonstrate the convergence behaviors and efficiency of these optimizers in various optimization landscapes, such as convex, non-convex, and saddle-point surfaces. Using both synthetic data and real-world examples, the project will explore how each optimizer performs across different types of loss surfaces. By generating dynamic, animated visualizations, we aim to provide a deeper understanding of how each optimizer functions, offering a valuable tool for students and practitioners to choose the right optimization technique for their machine learning models.
 
+
 ```{r}
 #| label: load-packages
 #| include: false
@@ -38,6 +40,7 @@ pacman::p_load(tidyverse, tidytuesdayR, broom, kableExtra, ggplot2,
                gganimate, dplyr, tidyr, viridis, ggrepel, gifski)
 
 ```
+
 
 ## **Approach:**
 
@@ -87,6 +90,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     -   **Description**: A smooth, convex paraboloid that is symmetric around the origin, making it a straightforward example to observe the convergence path.
 
+
     ```{r eval=TRUE, warning=FALSE}
 
         x <- seq(-5, 5, length.out = 100)
@@ -101,6 +105,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```
 
+
 -   ***Rosenbrock Function (Non-Convex Surface)***:
 
     -   **Formula**: $$f(x, y) = (a - x)^2 + b \cdot (y - x^2)^2$$
@@ -110,6 +115,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
     -   **Minimum**: Located at (a, a\^2), typically (1,1) with the default parameters.
 
     -   **Description**: This non-convex function has a narrow valley that requires careful adjustment to navigate. It's often used to highlight how optimizers handle complex landscapes.
+
 
     ```{r eval=TRUE, warning=FALSE}
             
@@ -126,6 +132,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```
 
+
 -   ***Saddle Point Function (Mixed Curvature Surface)***:
 
     -   **Formula**: $$f(x, y) = x^2 - y^2$$
@@ -133,6 +140,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
     -   **Saddle Point**: Located at (0,0).
 
     -   **Description**: This function has a saddle point at the origin. It’s concave along one axis and convex along the other, providing a useful case for understanding optimizers' sensitivity to directional changes in curvature.
+
 
     ```{r eval=TRUE, warning=FALSE}
     x <- seq(-5, 5, length.out = 100)
@@ -146,6 +154,7 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
     ```
 
+
 ### **Gradient Descent**
 
 -   **Mathematical Intuition:** Gradient Descent updates parameters based on the negative gradient of the loss function. For a function f(x)f(x), the update rule is:
@@ -156,8 +165,8 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
 
 -   **R Implementation:**
 
-```{r include=TRUE}
 
+```{r include=TRUE}
 # Gradient Descent Function
 gradient_descent <- function(x_init, y_init, learning_rate, n_iter) {
   x <- x_init
@@ -235,6 +244,7 @@ cat("GIF saved as 'gradient_descent_arrows.gif'\n")
 
 ```
 
+
 ![](gradient_descent_arrows.gif)
 
 **Explanation:** In this visualization, we start at the initial point ( 4 , 4 ) on the surface of the quadratic function 𝑓 ( 𝑥 , 𝑦 ) = 𝑥 2 + 𝑦 2. The gradient descent algorithm iteratively updates the values of 𝑥 and 𝑦 by moving in the direction of the steepest descent, determined by the negative gradient of the function.
@@ -248,6 +258,7 @@ The trajectory clearly illustrates how gradient descent converges toward the glo
 -   **Mathematical Intuition:** In **SGD**, instead of using the full gradient, we compute the gradient using a single random data point. This makes the process noisy but can be more efficient in large datasets.
 
 -   **R Implementation:**
+
 
     ```{r}
     # Stochastic Gradient Descent on Quadratic Function
@@ -331,6 +342,7 @@ The trajectory clearly illustrates how gradient descent converges toward the glo
 
     ```
 
+
     ![](stochastic_gradient_descent_arrows.gif)
 
 **Explanation:**  In this visualization, we begin at the initial point ( 4 , 4 ) and update the values of 𝑥 and 𝑦 at each step using the stochastic gradient descent algorithm. Instead of calculating the full gradient, noise is added to the gradient at each iteration to simulate a stochastic environment.
@@ -362,6 +374,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 -   Momentum helps speed up the convergence by adding a fraction of the previous velocity to the current gradient.
 
 -   **R Implementation:**
+
 
     ```{r}
     # Momentum Optimization on Quadratic Function
@@ -452,6 +465,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 
     ```
 
+
     ![](momentum_optimizer_arrows.gif)
 
 -   **Explanation**: This visualization starts at the initial point (4,4) and simulates the updates using the momentum optimization technique. At each step
@@ -489,6 +503,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 -   AdaGrad ensures that frequently updated parameters have smaller learning rates.
 
 -   **R Implementation:**
+
 
     ```{r}
     # AdaGrad Optimizer Function
@@ -577,6 +592,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 
     ```
 
+
     ![](adagrad_optimizer_arrows.gif)
 
 -   **Explanation**: We start at the initial point ( 4 , 4 ) on the quadratic surface 𝑓 ( 𝑥 , 𝑦 ) = 𝑥 2 + 𝑦 2 . The AdaGrad optimizer updates the learning rate for each parameter adaptively, based on the accumulated squared gradients. Parameters with frequently large gradients get smaller updates. Parameters with infrequent large gradients get larger updates. Arrows represent the direction and magnitude of updates at each step. The trajectory converges toward the global minimum at ( 0 , 0 ), demonstrating how AdaGrad adjusts its learning rate dynamically to achieve convergence in a smooth, convex optimization landscape.
@@ -616,6 +632,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
     -   RMSProp adapts the learning rate based on recent gradient information, helping to prevent the learning rate from shrinking too quickly.
 
 -   **R Implementation:**
+
 
     ```{r}
     # RMSProp Optimization on Quadratic Function
@@ -707,6 +724,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 
     ```
 
+
 ![](rmsprop_optimizer_arrows.gif)
 
 -   **Explanation**:
@@ -772,6 +790,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 -   Adam is highly effective and widely used due to its ability to adapt the learning rate(based on the gradient's first and second moments) and improve convergence for a wide variety of tasks.
 
 -   **R Implementation:**
+
 
     ```{r}
     # Adam Optimizer Function
@@ -874,6 +893,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
 
     ```
 
+
     ![](adam_optimizer_arrows.gif)
 
 -   **Explanation**:
@@ -891,6 +911,7 @@ The visualization highlights the efficiency of stochastic gradient descent in la
     -   Arrows represent the direction and magnitude of updates at each step, showing the optimizer’s ability to adapt learning rates and converge efficiently to the global minimum at (0,0).
 
 ### Visualizing the different optimizers behavior
+
 
 ```{r}
 
@@ -1078,6 +1099,7 @@ animated_plot <- ggplot() +
 animate(animated_plot, fps = 5, width = 800, height = 600, renderer = gifski_renderer("presentation_files/optimization_3d_fixed.gif"))
 ```
 
+
 ![](optimization_3d_fixed.gif)
 
 ### **Efficiency Comparison**
@@ -1111,6 +1133,7 @@ animate(animated_plot, fps = 5, width = 800, height = 600, renderer = gifski_ren
 -   **Adam** is widely regarded as the most efficient and versatile optimizer for general use cases due to its adaptive nature, fast convergence, and stability. However, for very specific tasks, other methods like RMSProp or AdaGrad may perform better.
 
 ### 2D static images
+
 
 ```{r}
 options(warn = -1) # Suppress warnings
@@ -1166,6 +1189,7 @@ ggsave("presentation_files/adam_arrows.png", plot_optimizer_with_arrows(adam_tra
 
 ```
 
+
 ### Comparison Between Optimizer's
 
 | **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
@@ -1178,3 +1202,4 @@ ggsave("presentation_files/adam_arrows.png", plot_optimizer_with_arrows(adam_tra
 | **Adam**             | Combines Momentum + RMSProp        | Fast, robust to noise       | Complex, more tuning needed | General-purpose neural networks   |
 
 ## Exploring Optimizer's on Real World Data
+

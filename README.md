@@ -64,7 +64,7 @@ By the end of this project, we expect to deliver:
 - **Interactive Learning Tool**: An animated, interactive tool to aid in understanding the dynamics of various optimizers.
 - **Insights on Optimizer Suitability**: Insights on how to choose the best optimizer for specific machine learning tasks.
 
-![](optimization_3d_fixed.gif)
+![](presentation_files/optimization_3d_fixed.gif)
 
 ## Conclusion
 
