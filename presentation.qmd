@@ -24,60 +24,60 @@ execute:
   warning: false
 ---
 
-<!-- Introduction Slide -->
+## Neural Networks Back-propagation(Optimization) 
 
-<img src="images/Intro.png" style="width: 100%; height: auto;"/>
-
-------------------------------------------------------------------------
-
-<!-- Dataset Overview Slide -->
-
-<img src="images/dataset.png" style="width: 100%; height: auto;"/>
+![](presentation_files/backpropagation.gif)
 
 ------------------------------------------------------------------------
 
-<!-- Question 1 Slide -->
+## Gradient Descent
 
-<img src="images/Q1.png" style="width: 100%; height: auto;"/>
-
-------------------------------------------------------------------------
-
-<!-- Visualization of Question 1 Slide -->
-
-<img src="images/Q1_Viz.png" style="width: 100%; height: auto;"/>
+![](presentation_files/gd.gif)
 
 ------------------------------------------------------------------------
 
-<!-- Question 2 Slide -->
+<!-- Visualization of Gradient Descent -->
 
-<img src="images/Q2.png" style="width: 100%; height: auto;"/>
-
-------------------------------------------------------------------------
-
-<!-- Visualization of Question 2 Slide -->
-
-<img src="images/Q2_Viz.png" style="width: 100%; height: auto;"/>
+![](presentation_files/gradient_descent_arrows.gif)
 
 ------------------------------------------------------------------------
 
-<!-- Question 3 Slide -->
+<!-- Visualization of Stochastic Gradient Descent -->
 
-<img src="images/Q3.png" style="width: 100%; height: auto;"/>
-
-------------------------------------------------------------------------
-
-<!-- Visualization of Question 3 Slide -->
-
-<img src="images/Q3_Viz.png" style="width: 100%; height: auto;"/>
+![](presentation_files/stochastic_gradient_descent_arrows.gif)
 
 ------------------------------------------------------------------------
 
-<!-- Conclusion Slide -->
+<!-- Visualization of Momentum -->
 
-<img src="images/Conclusion.png" style="width: 100%; height: auto;"/>
+![](presentation_files/momentum_optimizer_arrows.gif)
+
+------------------------------------------------------------------------
+
+<!-- Visualization of AdaGrade -->
+
+![](presentation_files/adagrad_optimizer_arrows.gif)
+
+------------------------------------------------------------------------
+
+<!-- Visualization of RMSProp -->
+
+![](presentation_files/rmsprop_optimizer_arrows.gif)
+
+------------------------------------------------------------------------
+
+<!-- Visualization of Adam -->
+
+![](presentation_files/adam_optimizer_arrows.gif)
+
+------------------------------------------------------------------------
+
+<!-- Visualizing the different optimizers behavior -->
+
+![](presentation_files/optimization_3d_fixed.gif)
 
 ------------------------------------------------------------------------
 
 <!-- Thank You Slide -->
 
-<img src="images/Thanks.png" style="width: 100%; height: auto;"/>
+![](presentation_files/arizona_emblame.webp){fig-align="center" width="70"}
