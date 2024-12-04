@@ -24,7 +24,7 @@ execute:
   warning: false
 ---
 
-## Neural Networks Back-propagation(Optimization) 
+## Neural Networks Back-propagation(Optimization)
 
 ![](presentation_files/backpropagation.gif)
 

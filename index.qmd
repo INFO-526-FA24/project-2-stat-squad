@@ -731,9 +731,8 @@ Synthetic data helps us simulate and study optimizer behavior in controlled envi
     knitr::include_graphics("presentation_files/rmsprop_optimizer_arrows.gif")
     ```
 
-```{=html}
 <!-- -->
-```
+
 -   **Explanation**:
 
     -   We start at the initial point (4,4) on the quadratic surface f(x, y) = x\^2 + y\^2.
@@ -1221,7 +1220,7 @@ knitr::include_graphics("presentation_files/adam_arrows.png")
 ### Comparison Between Optimizer's
 
 | **Optimizer**        | **Description**                    | **Pros**                    | **Cons**                    | **Best Use**                      |
-|---------------|---------------|---------------|---------------|---------------|
+|----------------------|------------------------------------|-----------------------------|-----------------------------|-----------------------------------|
 | **Gradient Descent** | Full gradient each update          | Stable convergence          | Slow, costly                | Small, static datasets            |
 | **SGD**              | One sample/batch per update        | Fast, escapes minima        | High variance, less stable  | Large datasets, limited resources |
 | **Momentum**         | Adds momentum to smooth updates    | Faster, reduces oscillation | Adds tuning complexity      | Oscillatory paths                 |
