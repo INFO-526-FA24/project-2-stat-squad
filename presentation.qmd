@@ -2,11 +2,12 @@
 title: |
   <span style="color: white; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;">Deep Learning Optimizer Dynamics</span>
 subtitle: |
-  <div style="background-color: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; display: inline-block;">
-  <strong>Stat Squad Team</strong><br>
-  Project 2<br>
-  Data Visualization Class<br>
-  December, 2024
+  <div style="background-color: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; display: inline-block; font-size: 0.9em;">
+    Project 2 <br>
+    Team <strong>Stat Squad</strong> <br>
+    <p style="font-size: 0.8em;">PG - Prasanth Gubbala, PK - Prudhvi Kandregula, XD - Xenia De Gracia, RK - Rishab RK </p> <br>
+    INFO 526 FA24 001 Data Visualization <br>
+    Fall-2024
   </div>
 title-slide-attributes:
   data-background-image: "images/cover.jpg"
