@@ -99,7 +99,7 @@ execute:
   <a href="https://info-526-fa24.github.io/project-2-stat-squad/" style="font-size: 20px; margin: 0 20px; cursor: pointer; color: #0073e6;">
     <span>Go to Project Homepage</span>
   </a>
-  <a href="https://github.com/INFO-526-FA24/project-2-stat-squad" style="font-size: 20px; margin: 0 20px; cursor: pointer; color: #0073e6;">
+  <a href="https://github.com/INFO-526-FA24/project-2-stat-squad" target="_blank" style="font-size: 20px; margin: 0 20px; cursor: pointer; color: #0073e6;">
     <span>Visit GitHub Repository</span>
   </a>
 </div>
