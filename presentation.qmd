@@ -1,9 +1,10 @@
 ---
 title: |
-  <span style="color: white; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;">Deep Learning Optimizer Dynamics</span>
+  <div id="top"></div>
+  <a href="https://info-526-fa24.github.io/project-2-stat-squad/" style="color: white; text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000;">Deep Learning Optimizer Dynamics</a>
+
 subtitle: |
   <div style="background-color: rgba(255, 255, 255, 0.8); padding: 10px; border-radius: 5px; display: inline-block; font-size: 0.9em;">
-    Project 2 <br>
     Team <strong>Stat Squad</strong> <br>
     <p style="font-size: 0.8em;">PG - Prasanth Gubbala, PK - Prudhvi Kandregula, XD - Xenia De Gracia, RK - Rishab RK </p> <br>
     INFO 526 FA24 001 Data Visualization <br>
@@ -86,8 +87,26 @@ execute:
 ------------------------------------------------------------------------
 
 <!-- Thank You Slide -->
-
-<div style="display: flex; justify-content: center; align-items: center; height: 70vh; text-align: center; font-size: 70px;">
-  <p>Thank You!</p>
+<div style="display: flex; justify-content: center; align-items: center; text-align: center; height: 65vh; flex-direction: row;">
+  <span style="font-size: 70px;">Thank You!</span>
 </div>
+
+<!-- Navigation Links -->
+<div style="display: flex; justify-content: center; align-items: center; text-align: center; flex-direction: row; margin-top: -25%;">
+  <a href="#top" style="font-size: 20px; margin: 0 20px; cursor: pointer; color: #0073e6;">
+    <span>Back to Top</span>
+  </a>
+  <a href="https://info-526-fa24.github.io/project-2-stat-squad/" style="font-size: 20px; margin: 0 20px; cursor: pointer; color: #0073e6;">
+    <span>Go to Project Homepage</span>
+  </a>
+  <a href="https://github.com/INFO-526-FA24/project-2-stat-squad" style="font-size: 20px; margin: 0 20px; cursor: pointer; color: #0073e6;">
+    <span>Visit GitHub Repository</span>
+  </a>
+</div>
+
+
+
+
   
+
+
