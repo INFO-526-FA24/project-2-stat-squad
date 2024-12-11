@@ -79,6 +79,15 @@ execute:
 
 ------------------------------------------------------------------------
 
+::: {style="display: flex; justify-content: center; align-items: center; height: 70vh; margin: 0;"}
+![](presentation_files/uofa.png)
+:::
+
+------------------------------------------------------------------------
+
 <!-- Thank You Slide -->
 
-![](presentation_files/arizona_emblame.webp){fig-align="center" width="70"}
+<div style="display: flex; justify-content: center; align-items: center; height: 70vh; text-align: center; font-size: 70px;">
+  <p>Thank You!</p>
+</div>
+  
